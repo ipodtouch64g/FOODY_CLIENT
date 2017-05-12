@@ -19,10 +19,13 @@
   text-align: center;
 }
 .main .footer {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 300;
+  letter-spacing: .1rem;
+  color : white;
+  background-color: #6F4E37;
   text-align: center;
-  background: rgb(243, 243, 243);
-  color: rgba(108, 93, 81, 0.7);
-  padding: 3rem 2rem 2rem 2rem;
+  padding: 2rem 2rem 2rem 2rem;
 }
 
 
@@ -36,7 +39,12 @@
   padding-right: 1rem;
   font-size: 1.5rem;
 }
-
+.contents{
+  background-color: rgb(243, 243, 243);
+  color: rgba(108, 93, 81, 1);
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
 .main-title {
   top: 3rem;
 

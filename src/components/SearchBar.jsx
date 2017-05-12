@@ -1,7 +1,13 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
+import {
+    Form,
+    Input,
+    Button,
+} from 'reactstrap';
 import './SearchBar.css'
 const languages = [
+
   {
     title: '1970s',
     languages: [
@@ -129,10 +135,13 @@ function getSectionSuggestions(section) {
   return section.languages;
 }
 
+function shouldRenderSuggestions() {
+  return true;
+}
 export default class SearchBar extends React.Component {
   constructor() {
     super();
-
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       value: '',
       suggestions: []
@@ -157,7 +166,20 @@ export default class SearchBar extends React.Component {
     });
   };
 
+  onSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+    this.handleSubmit(event,suggestionValue);
+  };
+
+  handleSubmit(e,suggestionValue) {
+      e.preventDefault();
+      if(e.type==="submit")
+        console.log(this.state.value);
+      else
+        console.log(suggestionValue);
+  }
+
   render() {
+
     const { value, suggestions } = this.state;
     const inputProps = {
       placeholder: "美食 地點 隨你搜",
@@ -166,16 +188,25 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <Autosuggest
-        multiSection={true}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        renderSectionTitle={renderSectionTitle}
-        getSectionSuggestions={getSectionSuggestions}
-        inputProps={inputProps} />
+      <div className='searchbar'>
+        <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
+          <Autosuggest
+            multiSection={true}
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            renderSectionTitle={renderSectionTitle}
+            getSectionSuggestions={getSectionSuggestions}
+            inputProps={inputProps}
+        
+  onSuggestionSelected={this.onSuggestionSelected}
+          />
+        </Form>
+      </div>
+
+
     );
   }
 }

@@ -14,6 +14,9 @@ import {
   Button
 } from 'reactstrap';
 import SearchBar from './SearchBar.jsx'
+import SearchList from './SearchList.jsx'
+import Shops from './Shops.jsx'
+import Recommend from './Recommend.jsx'
 import './Main.css';
 
 export default class Main extends React.Component {
@@ -25,6 +28,7 @@ export default class Main extends React.Component {
   render() {
     return (
       <Router>
+
         <div className='main'>
           <div className='bg'>
           <Container fluid>
@@ -44,20 +48,43 @@ export default class Main extends React.Component {
                     <div className='container searchIcon'><i className="fa fa-search" aria-hidden="true"></i></div>
                     <SearchBar/>
                 </div>
+                <Nav>
+                  <NavItem>
+                    <NavLink tag={Link} to='/shops'>SHOPS!!!!!!!!</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={Link} to='/'>RECOMMENDS!!!!!!!!</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={Link} to='/lists'>LISTS!!!!!!!!!</NavLink>
+                  </NavItem>
+                </Nav>
 
               </div>
           </Container>
           </div>
-          {/* <Route exact path="/" render={() => (
+          <div className='contents'>
+            <Container fluid>
+              <Route exact path="/" render={() => (
+                  <Recommend/>
+              )}/>
+              <Route exact path="/lists" render={() => (
+                  <SearchList/>
+              )}/>
+              <Route exact path="/shops" render={() => (
+                  <Shops/>
+              )}/>
+            </Container>
+          </div>
 
-                    )}/> */}
 
           <div className='footer'>
-            FOODY.
+            FOODY | BY TEAM SIX
           </div>
         </div>
       </Router>
     );
   }
+
 
 }
