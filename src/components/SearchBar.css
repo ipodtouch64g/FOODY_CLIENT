@@ -30,6 +30,7 @@
 
 .react-autosuggest__suggestions-container--open {
   display: block;
+  text-align: center;
   position: relative;
   margin : 0 auto;
   top: 25px;
@@ -45,13 +46,14 @@
 }
 
 .react-autosuggest__suggestions-list {
-
+text-align: center;
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
 
 .react-autosuggest__suggestion {
+  text-align: center;
   cursor: pointer;
   padding: 10px 20px;
 }
@@ -69,6 +71,7 @@
 }
 
 .react-autosuggest__section-title {
+  text-align: center;
   padding: 10px 0 0 10px;
   font-size: 12px;
   color: #777;

@@ -6,16 +6,11 @@ import {
 } from 'reactstrap';
 
 import SearchItem from 'components/SearchItem.jsx';
-// import {createVote} from 'api/posts.js';
+import {searchList_fake} from 'api/posts.js';
 
 import './SearchList.css';
 
-export default class PostList extends React.Component {
-    static propTypes = {
-        posts: PropTypes.array,
-        filter: PropTypes.string,
-        onVote: PropTypes.func
-    };
+export default class SearchList extends React.Component {
 
     constructor(props) {
         super(props);
@@ -23,7 +18,7 @@ export default class PostList extends React.Component {
         this.state = {
         };
 
-        this.handleVote = this.handleVote.bind(this);
+
     }
 
     render() {
@@ -31,13 +26,13 @@ export default class PostList extends React.Component {
 
         let children = (
             <ListGroupItem className='empty d-flex justify-content-center align-items-center'>
-                <div className='empty-text'>No post here.<br />Go add some posts.</div>
+                <div className='empty-text'>找不到餐廳喔<br />試試看別的吧</div>
             </ListGroupItem>
         );
         if (posts.length) {
             children = posts.map(p => (
                 <ListGroupItem key={p.id} action>
-                    <PostItem {...p} onVote={this.handleVote} />
+                    <SearchItem {...p}/>
                 </ListGroupItem>
             ));
         }
@@ -45,11 +40,11 @@ export default class PostList extends React.Component {
         return (
             <div className='post-list'>
                 <ListGroup>{children}</ListGroup>
+
             </div>
         );
     }
 
-    handleVote(id, mood) {
-        this.props.onVote(id, mood);
-    }
+
+
 }

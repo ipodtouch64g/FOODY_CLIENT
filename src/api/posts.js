@@ -21,7 +21,7 @@ export function searchList_fake(searchText = '') {
 }
 
 // Simulated server-side code
-function _searchList_fake(searchText = '') {
+function _searchList_fake(searchText='') {
     // let postString = localStorage.getItem(postKey);
     // let posts = postString
     //     ? JSON.parse(postString)
@@ -31,10 +31,22 @@ function _searchList_fake(searchText = '') {
     //         return p.text.toLocaleLowerCase().indexOf(searchText.toLowerCase()) !== -1
     //     });
     // }
-    let posts = require('./data.json');
-    let posts_ = JSON.parse(posts);
-    return posts_;
+
+    let post = require('../data.json');
+
+    console.log(searchText);
+    if (post.rests.length > 0 ) {
+      console.log("CHECK!");
+      post.rests = post.rests.filter(p => {
+          return p.name.indexOf(searchText) !== -1 || p.category.indexOf(searchText) !== -1
+      });
+    }
+
+
+    console.log(post);
+    return post;
 };
+
 
 // export function listPosts(searchText = '', start) {
 //     let url = `${postBaseUrl}/posts`;

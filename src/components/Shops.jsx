@@ -13,7 +13,7 @@ export default class Shops extends React.Component {
     super();
 
     this.state = {
-
+      open:false
     };
   }
 
@@ -22,7 +22,12 @@ export default class Shops extends React.Component {
 
     return (
       <div className='shops'>
-        shops
+        {this.state.open &&
+          <Container>
+              2
+        </Container>
+      }
+
       </div>
 
 

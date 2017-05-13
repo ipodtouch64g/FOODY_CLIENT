@@ -1,86 +1,77 @@
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
-import {
-    Form,
-    Input,
-    Button,
-} from 'reactstrap';
+import {Form, Input, Button} from 'reactstrap';
 import './SearchBar.css'
 const languages = [
 
   {
-    title: '1970s',
+    title: '地點',
     languages: [
       {
-        name: 'C',
+        name: '台北',
+        year: 1972
+      },
+      {
+        name: '台中',
+        year: 1972
+      },
+      {
+        name: '台難',
         year: 1972
       }
     ]
-  },
-  {
+  }, {
     title: '1980s',
     languages: [
       {
         name: 'C++',
         year: 1983
-      },
-      {
+      }, {
         name: 'Perl',
         year: 1987
       }
     ]
-  },
-  {
+  }, {
     title: '1990s',
     languages: [
       {
         name: 'Haskell',
         year: 1990
-      },
-      {
+      }, {
         name: 'Python',
         year: 1991
-      },
-      {
+      }, {
         name: 'Java',
         year: 1995
-      },
-      {
+      }, {
         name: 'Javascript',
         year: 1995
-      },
-      {
+      }, {
         name: 'PHP',
         year: 1995
-      },
-      {
+      }, {
         name: 'Ruby',
         year: 1995
       }
     ]
-  },
-  {
+  }, {
     title: '2000s',
     languages: [
       {
         name: 'C#',
         year: 2000
-      },
-      {
+      }, {
         name: 'Scala',
         year: 2003
-      },
-      {
+      }, {
         name: 'Clojure',
         year: 2007
-      },
-      {
+      }, {
         name: 'Go',
         year: 2009
       }
     ]
-  },
-  {
+  }, {
     title: '2010s',
     languages: [
       {
@@ -105,14 +96,12 @@ function getSuggestions(value) {
 
   const regex = new RegExp('^' + escapedValue, 'i');
 
-  return languages
-    .map(section => {
-      return {
-        title: section.title,
-        languages: section.languages.filter(language => regex.test(language.name))
-      };
-    })
-    .filter(section => section.languages.length > 0);
+  return languages.map(section => {
+    return {
+      title: section.title,
+      languages: section.languages.filter(language => regex.test(language.name))
+    };
+  }).filter(section => section.languages.length > 0);
 }
 
 function getSuggestionValue(suggestion) {
@@ -148,39 +137,40 @@ export default class SearchBar extends React.Component {
     };
   }
 
-  onChange = (event, { newValue, method }) => {
-    this.setState({
-      value: newValue
-    });
+  onChange = (event, {newValue, method}) => {
+    this.setState({value: newValue});
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: getSuggestions(value)
-    });
+  onSuggestionsFetchRequested = ({value}) => {
+    this.setState({suggestions: getSuggestions(value)});
   };
 
   onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
+    this.setState({suggestions: []});
   };
 
-  onSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-    this.handleSubmit(event,suggestionValue);
+  onSuggestionSelected = (event, {suggestion, suggestionValue, suggestionIndex, sectionIndex, method}) => {
+    this.handleSubmit(event, suggestionValue);
   };
 
-  handleSubmit(e,suggestionValue) {
-      e.preventDefault();
-      if(e.type==="submit")
+  handleSubmit(e, suggestionValue) {
+    e.preventDefault();
+    if (this.state.value !== '') {
+      if (e.type === "submit") {
         console.log(this.state.value);
-      else
+        this.props.onSearch(this.state.value);
+      } else {
         console.log(suggestionValue);
+        this.props.onSearch(suggestionValue);
+      }
+    } else {
+      this.setState({value: ''});
+    }
   }
 
   render() {
 
-    const { value, suggestions } = this.state;
+    const {value, suggestions} = this.state;
     const inputProps = {
       placeholder: "美食 地點 隨你搜",
       value,
@@ -190,22 +180,9 @@ export default class SearchBar extends React.Component {
     return (
       <div className='searchbar'>
         <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
-          <Autosuggest
-            multiSection={true}
-            suggestions={suggestions}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderSuggestion}
-            renderSectionTitle={renderSectionTitle}
-            getSectionSuggestions={getSectionSuggestions}
-            inputProps={inputProps}
-        
-  onSuggestionSelected={this.onSuggestionSelected}
-          />
+          <Autosuggest multiSection={true} suggestions={suggestions} onSuggestionsFetchRequested={this.onSuggestionsFetchRequested} onSuggestionsClearRequested={this.onSuggestionsClearRequested} getSuggestionValue={getSuggestionValue} renderSuggestion={renderSuggestion} renderSectionTitle={renderSectionTitle} getSectionSuggestions={getSectionSuggestions} inputProps={inputProps} onSuggestionSelected={this.onSuggestionSelected}/>
         </Form>
       </div>
-
 
     );
   }
