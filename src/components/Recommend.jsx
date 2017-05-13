@@ -1,31 +1,26 @@
 import React from 'react';
 
 import {
-    Form,
-    Input,
-    Button,
+  Form,
+  Input,
+  Button,
+  Card,
+  CardTitle,
+  CardText,
+  Container,
+  Row,
+  Col
 } from 'reactstrap';
 import './Recommend.css'
-
 
 export default class Recommand extends React.Component {
   constructor() {
     super();
-
-    this.state = {
-
-    };
+    this.state = {};
   }
-
   render() {
-
-
     return (
-      <div className='recommend'>
-        recommend
-      </div>
-
-
+      <div></div>
     );
   }
 }

@@ -31,7 +31,7 @@ export default class Main extends React.Component {
 
         <div className='main'>
           <div className='bg'>
-          <Container fluid>
+          <Container>
               <div className='container d-flex flex-column  justify-content-between align-items:center '>
                 &nbsp;
                 <div></div>
@@ -59,7 +59,6 @@ export default class Main extends React.Component {
                     <NavLink tag={Link} to='/lists'>LISTS!!!!!!!!!</NavLink>
                   </NavItem>
                 </Nav>
-
               </div>
           </Container>
           </div>

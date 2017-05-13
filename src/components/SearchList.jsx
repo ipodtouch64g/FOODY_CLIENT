@@ -1,31 +1,55 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import {
-    Form,
-    Input,
-    Button,
+    ListGroup,
+    ListGroupItem
 } from 'reactstrap';
-import './SearchList.css'
 
+import SearchItem from 'components/SearchItem.jsx';
+// import {createVote} from 'api/posts.js';
 
-export default class SearchList extends React.Component {
-  constructor() {
-    super();
+import './SearchList.css';
 
-    this.state = {
-      
+export default class PostList extends React.Component {
+    static propTypes = {
+        posts: PropTypes.array,
+        filter: PropTypes.string,
+        onVote: PropTypes.func
     };
-  }
 
-  render() {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+        };
 
-    return (
-      <div className='searchlist'>
-        8888
-      </div>
+        this.handleVote = this.handleVote.bind(this);
+    }
 
+    render() {
+        const {posts} = this.props;
 
-    );
-  }
+        let children = (
+            <ListGroupItem className='empty d-flex justify-content-center align-items-center'>
+                <div className='empty-text'>No post here.<br />Go add some posts.</div>
+            </ListGroupItem>
+        );
+        if (posts.length) {
+            children = posts.map(p => (
+                <ListGroupItem key={p.id} action>
+                    <PostItem {...p} onVote={this.handleVote} />
+                </ListGroupItem>
+            ));
+        }
+
+        return (
+            <div className='post-list'>
+                <ListGroup>{children}</ListGroup>
+            </div>
+        );
+    }
+
+    handleVote(id, mood) {
+        this.props.onVote(id, mood);
+    }
 }
