@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Container,
-    ListGroup,
-    ListGroupItem
+    Container
 } from 'reactstrap';
-import SearchItem from 'components/SearchItem.jsx';
+import SearchList from 'components/SearchList.jsx';
 import './Search.css';
 import {searchList_fake} from 'api/posts.js';
 
-export default class Main extends React.Component {
+export default class Search extends React.Component {
 
   constructor(props) {
     super(props);
@@ -20,7 +18,6 @@ export default class Main extends React.Component {
         posts: []
     };
     this.listPosts = this.listPosts.bind(this);
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,8 +28,9 @@ export default class Main extends React.Component {
       },()=>{
         if(this.state.open)
         {
+          console.log("ss");
           this.listPosts(this.state.searchText);
-          console.log("jhegjkhegjhjhfghjgrhi",this.state.posts);
+
         }
       });
 
@@ -42,11 +40,12 @@ export default class Main extends React.Component {
     return (
           <div className='contents'>
             {this.state.open &&
-              <Container>
-
+              <Container fluid>
+                <div>
+                  <SearchList posts={this.state.posts}/>
+                </div>
               </Container>
           }
-
           </div>
     );
   }
@@ -59,7 +58,7 @@ export default class Main extends React.Component {
                   posts,
                   Loading: false
               },()=>{
-                console.log("After call",this.state.posts);
+                console.log("ajax call",this.state.posts);
               });
           }).catch(err => {
               console.error('Error listing posts', err);

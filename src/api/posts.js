@@ -2,6 +2,7 @@ import axios from 'axios';
 import uuid from 'uuid/v4';
 import moment from 'moment';
 import 'babel-polyfill';
+const Jdata = require('../data.json');
 
 // Develop server URL
 const postBaseUrl = 'http://localhost:3000/api';
@@ -31,14 +32,13 @@ function _searchList_fake(searchText='') {
     //         return p.text.toLocaleLowerCase().indexOf(searchText.toLowerCase()) !== -1
     //     });
     // }
-
-    let post = require('../data.json');
+    var post = Jdata.rests;
 
     console.log(searchText);
-    if (post.rests.length > 0 ) {
-      console.log("CHECK!");
-      post.rests = post.rests.filter(p => {
-          return p.name.indexOf(searchText) !== -1 || p.category.indexOf(searchText) !== -1
+    if (post.length > 0 ) {
+      console.log("CHECK!",post);
+      post = post.filter(p => {
+          return p.address.indexOf(searchText) !== -1 ||p.name.indexOf(searchText) !== -1 || p.category.indexOf(searchText) !== -1
       });
     }
 

@@ -157,10 +157,10 @@ export default class SearchBar extends React.Component {
     e.preventDefault();
     if (this.state.value !== '') {
       if (e.type === "submit") {
-        console.log(this.state.value);
+        
         this.props.onSearch(this.state.value);
       } else {
-        console.log(suggestionValue);
+
         this.props.onSearch(suggestionValue);
       }
     } else {

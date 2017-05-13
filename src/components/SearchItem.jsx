@@ -1,30 +1,19 @@
 import React from 'react';
 
-import {
-    Form,
-    Input,
-    Button,
-} from 'reactstrap';
+import {Form, Input, Button} from 'reactstrap';
 import './SearchItem.css'
 
-
 export default class SearchItem extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.state = {
-
-    };
   }
 
   render() {
-
-
     return (
       <div className='searchitem'>
-
+        {this.props.name}
       </div>
-
 
     );
   }

@@ -29,8 +29,6 @@ export default class Main extends React.Component {
     this.state = {
       searchText : '',
       openList : false,
-      loadingList : false,
-      loadingShop : false,
       openShop : false
     };
     this.handleSearch = this.handleSearch.bind(this);
@@ -40,8 +38,6 @@ export default class Main extends React.Component {
     this.setState({
         searchText: searchtext,
         openList : true
-    },() =>{
-      console.log(this.state);
     });
   }
 
@@ -74,8 +70,10 @@ export default class Main extends React.Component {
             </div>
             <div className='contents'>
               <Container fluid>
-                <Search searchtext={this.state.searchText} open={this.state.openList} loading={this.state.loadingList}/>
-                <Shops open={this.state.openShop} loading={this.state.loadingShop}/>
+                <div>
+                <Search searchtext={this.state.searchText} open={this.state.openList} />
+                <Shops open={this.state.openShop}/>
+              </div>
               </Container>
             </div>
             <div className='footer'>

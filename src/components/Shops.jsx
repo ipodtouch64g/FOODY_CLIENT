@@ -11,7 +11,6 @@ import './Shops.css'
 export default class Shops extends React.Component {
   constructor() {
     super();
-
     this.state = {
       open:false
     };
