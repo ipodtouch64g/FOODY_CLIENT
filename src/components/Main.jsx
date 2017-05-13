@@ -15,7 +15,7 @@ import {
   Input,
   Button
 } from 'reactstrap';
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
 import Search from './Search.jsx'
 import Shops from './Shops.jsx'
@@ -44,6 +44,7 @@ export default class Main extends React.Component {
 
   render() {
     return (
+      <MuiThemeProvider>
           <div className='main'>
             <div className='bg'>
               <Container fluid>
@@ -80,6 +81,7 @@ export default class Main extends React.Component {
               FOODY | BY TEAM SIX
             </div>
           </div>
+        </MuiThemeProvider>
 
 
 

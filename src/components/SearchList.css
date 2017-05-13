@@ -1,0 +1,25 @@
+.search-title{
+  background-color: white;
+  box-shadow : 1px 1px 2px #ddd;
+  height : 95px;
+  justify-content:center;
+}
+.search-title::after{
+  content: '';
+
+    display: block;
+    clear: both;
+}
+.search-title h3{
+  font-weight: 200;
+  padding-top: 1rem;
+  padding-left: 1rem;
+}
+.wrapper-cards{
+  padding-top: 1rem;
+}
+@media (max-width: 576px) {
+  .advance-search-col{
+    display:none;
+  }
+}

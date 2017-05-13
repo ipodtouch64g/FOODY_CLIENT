@@ -30,7 +30,6 @@ export default class Search extends React.Component {
         {
           console.log("ss");
           this.listPosts(this.state.searchText);
-
         }
       });
 
@@ -42,7 +41,7 @@ export default class Search extends React.Component {
             {this.state.open &&
               <Container fluid>
                 <div>
-                  <SearchList posts={this.state.posts}/>
+                  <SearchList posts={this.state.posts} searchText={this.state.searchText}/>
                 </div>
               </Container>
           }
