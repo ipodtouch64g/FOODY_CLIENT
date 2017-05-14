@@ -1,0 +1,42 @@
+.reference{
+  width:100%;
+  padding-bottom: 2rem;
+}
+.description-col{
+  margin-top:1rem;
+}
+.wrapper-title{
+  background-color: rgb(202, 80, 39);
+  background-image: url("images/coffee.jpg");
+  background-size: cover;
+  -o-background-size: cover;
+  background-position: bottom;
+  background-attachment: fixed;
+  color : white;
+  width:100%;
+  background-clip: content-box;
+  box-shadow : 1px 1px 2px #ddd;
+
+}
+.title-image{
+  padding: 2%;
+
+  border-radius: 2rem;
+  background-clip:         padding-box;
+}
+.store-name{
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 2rem;
+  display: inline-block;
+  text-shadow: 1px 1px rgb(101, 101, 101);
+}
+.store-atttributes{
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  font-size: 1rem;
+  display: inline-block;
+  text-shadow: 1px 1px rgb(101, 101, 101);
+}
