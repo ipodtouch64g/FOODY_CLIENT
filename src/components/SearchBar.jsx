@@ -2,6 +2,8 @@ import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import {Form, Input, Button} from 'reactstrap';
 import './SearchBar.css'
+import {BrowserRouter as Router, Route, Link, } from 'react-router-dom'
+
 const languages = [
 
   {
@@ -10,76 +12,16 @@ const languages = [
       {
         name: '台北',
         year: 1972
-      },
-      {
+      }, {
         name: '台中',
         year: 1972
-      },
-      {
+      }, {
         name: '台難',
         year: 1972
       }
     ]
-  }, {
-    title: '1980s',
-    languages: [
-      {
-        name: 'C++',
-        year: 1983
-      }, {
-        name: 'Perl',
-        year: 1987
-      }
-    ]
-  }, {
-    title: '1990s',
-    languages: [
-      {
-        name: 'Haskell',
-        year: 1990
-      }, {
-        name: 'Python',
-        year: 1991
-      }, {
-        name: 'Java',
-        year: 1995
-      }, {
-        name: 'Javascript',
-        year: 1995
-      }, {
-        name: 'PHP',
-        year: 1995
-      }, {
-        name: 'Ruby',
-        year: 1995
-      }
-    ]
-  }, {
-    title: '2000s',
-    languages: [
-      {
-        name: 'C#',
-        year: 2000
-      }, {
-        name: 'Scala',
-        year: 2003
-      }, {
-        name: 'Clojure',
-        year: 2007
-      }, {
-        name: 'Go',
-        year: 2009
-      }
-    ]
-  }, {
-    title: '2010s',
-    languages: [
-      {
-        name: 'Elm',
-        year: 2012
-      }
-    ]
   }
+
 ];
 
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
@@ -157,15 +99,17 @@ export default class SearchBar extends React.Component {
     e.preventDefault();
     if (this.state.value !== '') {
       if (e.type === "submit") {
-        
         this.props.onSearch(this.state.value);
-      } else {
 
+      } else {
         this.props.onSearch(suggestionValue);
+        
       }
     } else {
       this.setState({value: ''});
     }
+
+
   }
 
   render() {
@@ -179,9 +123,11 @@ export default class SearchBar extends React.Component {
 
     return (
       <div className='searchbar'>
+
         <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
           <Autosuggest multiSection={true} suggestions={suggestions} onSuggestionsFetchRequested={this.onSuggestionsFetchRequested} onSuggestionsClearRequested={this.onSuggestionsClearRequested} getSuggestionValue={getSuggestionValue} renderSuggestion={renderSuggestion} renderSectionTitle={renderSectionTitle} getSectionSuggestions={getSectionSuggestions} inputProps={inputProps} onSuggestionSelected={this.onSuggestionSelected}/>
         </Form>
+
       </div>
 
     );
