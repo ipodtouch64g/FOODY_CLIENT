@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -21,7 +21,8 @@ import {
 } from 'reactstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
-import Search from './Search.jsx'
+import SearchList from './SearchList.jsx'
+import {searchList_fake} from 'api/posts.js'
 import Shops from './Shops.jsx'
 import Recommend from './Recommend.jsx'
 import './Main.css';
@@ -31,24 +32,57 @@ export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText : '',
-      openList : false,
-      openShop : false
+      searchText: '',
+      openList: false,
+      openShop: false,
+      indexOfList: -1,
+      Loading: false,
+      posts: []
     };
+    this.listPosts = this.listPosts.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
+  }
+  handleSearchItemClick(index) {
+    console.log(index);
+    this.setState({indexOfList: index, openShop: true, openList: false});
   }
 
-  handleSearch(searchtext){
+  handleSearch(searchtext) {
     this.setState({
-        searchText: searchtext,
-        openList : true
+      searchText: searchtext,
+      openList: true,
+      Loading: true
+    }, () => {
+      if (this.state.openList) {
+        console.log("ss");
+        this.listPosts(this.state.searchText);
+      }
     });
   }
 
+  listPosts(searchText) {
+    this.setState({
+      Loading: true
+    }, () => {
+      searchList_fake(searchText).then(posts => {
+        this.setState({
+          posts,
+          Loading: false
+        }, () => {
+          console.log("ajax call", this.state.posts);
+        });
+      }).catch(err => {
+        console.error('Error listing posts', err);
+        this.setState({posts: [], Loading: false});
+      });
+    });
+  }
 
   render() {
     return (
-      <MuiThemeProvider>
+      <Router>
+        <MuiThemeProvider>
           <div className='main'>
             <div className='bg'>
               <Container fluid>
@@ -74,20 +108,16 @@ export default class Main extends React.Component {
               </Container>
             </div>
             <div className='contents'>
-              <Container fluid >
-                <div>
-                <Search searchtext={this.state.searchText} open={this.state.openList} />
-                <Shops open={this.state.openShop}/>
-                </div>
-              </Container>
+              <Route exact path="/" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/shop" render={() => (<Shops posts={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
+
             </div>
             <div className='footer'>
               FOODY | BY TEAM SIX
             </div>
           </div>
         </MuiThemeProvider>
-
-
+      </Router>
 
     );
   }

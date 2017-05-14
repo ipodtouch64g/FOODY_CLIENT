@@ -5,7 +5,7 @@ import 'babel-polyfill';
 const Jdata = require('../data.json');
 
 // Develop server URL
-const postBaseUrl = 'http://localhost:3000/api';
+const postBaseUrl = 'http://foody.us-west-2.elasticbeanstalk.com/api';
 
 // Staging server URL
 // const postBaseUrl = 'http://weathermood-staging.us-west-2.elasticbeanstalk.com/api';
@@ -13,40 +13,58 @@ const postBaseUrl = 'http://localhost:3000/api';
 // Production server URL
 // const postBaseUrl = 'http://weathermood-production.us-west-2.elasticbeanstalk.com/api';
 
-export function searchList_fake(searchText = '') {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(_searchList_fake(searchText));
-        }, 500);
+// export function searchList_fake(searchText = '') {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(_searchList_fake(searchText));
+//         }, 500);
+//     });
+// }
+//
+// // Simulated server-side code
+// function _searchList_fake(searchText='') {
+//     // let postString = localStorage.getItem(postKey);
+//     // let posts = postString
+//     //     ? JSON.parse(postString)
+//     //     : [];
+//     // if (posts.length > 0 && searchText) {
+//     //     posts = posts.filter(p => {
+//     //         return p.text.toLocaleLowerCase().indexOf(searchText.toLowerCase()) !== -1
+//     //     });
+//     // }
+//     var post = Jdata.rests;
+//
+//     console.log(searchText);
+//     if (post.length > 0 ) {
+//       console.log("CHECK!",post);
+//       post = post.filter(p => {
+//           return p.address.indexOf(searchText) !== -1 ||p.name.indexOf(searchText) !== -1 || p.category.indexOf(searchText) !== -1
+//       });
+//     }
+//
+//
+//     console.log(post);
+//     return post;
+// };
+export function searchList_fake(searchText = '', start) {
+    let url = `${postBaseUrl}/posts`;
+    let query = [];
+    if (searchText)
+        query.push(`searchText=${searchText}`);
+    if (start)
+        query.push(`start=${start}`);
+    if (query.length)
+        url += '?' + query.join('&');
+
+    console.log(`Making GET request to: ${url}`);
+
+    return axios.get(url).then(function(res) {
+        if (res.status !== 200)
+            throw new Error(`Unexpected response code: ${res.status}`);
+
+        return res.data;
     });
 }
-
-// Simulated server-side code
-function _searchList_fake(searchText='') {
-    // let postString = localStorage.getItem(postKey);
-    // let posts = postString
-    //     ? JSON.parse(postString)
-    //     : [];
-    // if (posts.length > 0 && searchText) {
-    //     posts = posts.filter(p => {
-    //         return p.text.toLocaleLowerCase().indexOf(searchText.toLowerCase()) !== -1
-    //     });
-    // }
-    var post = Jdata.rests;
-
-    console.log(searchText);
-    if (post.length > 0 ) {
-      console.log("CHECK!",post);
-      post = post.filter(p => {
-          return p.address.indexOf(searchText) !== -1 ||p.name.indexOf(searchText) !== -1 || p.category.indexOf(searchText) !== -1
-      });
-    }
-
-
-    console.log(post);
-    return post;
-};
-
 
 // export function listPosts(searchText = '', start) {
 //     let url = `${postBaseUrl}/posts`;
