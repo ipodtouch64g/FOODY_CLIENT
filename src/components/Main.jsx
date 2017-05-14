@@ -22,7 +22,7 @@ import {
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
 import SearchList from './SearchList.jsx'
-import {searchList_fake} from 'api/posts.js'
+import {searchListFromApi} from 'api/posts.js'
 import Shops from './Shops.jsx'
 import Recommend from './Recommend.jsx'
 import './Main.css';
@@ -35,7 +35,7 @@ export default class Main extends React.Component {
       searchText: '',
       openList: false,
       openShop: false,
-      indexOfList: -1,
+      indexOfList: 0,
       Loading: false,
       posts: []
     };
@@ -43,9 +43,12 @@ export default class Main extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
   }
-  handleSearchItemClick(index) {
-    console.log(index);
-    this.setState({indexOfList: index, openShop: true, openList: false});
+  handleSearchItemClick(index){
+    this.setState({
+      openList : false,
+      openShop :true,
+      indexOfList: index
+    });
   }
 
   handleSearch(searchtext) {
@@ -65,7 +68,7 @@ export default class Main extends React.Component {
     this.setState({
       Loading: true
     }, () => {
-      searchList_fake(searchText).then(posts => {
+      searchListFromApi(searchText).then(posts => {
         this.setState({
           posts,
           Loading: false
