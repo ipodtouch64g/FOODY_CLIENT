@@ -1,0 +1,11 @@
+.advance-search{
+  background-color: white;
+  background-clip: content-box;
+  box-shadow : 1px 1px 2px #ddd;
+  margin-top:1rem;
+
+}
+.slider{
+  margin: 0 auto;
+  width: 70%;
+}

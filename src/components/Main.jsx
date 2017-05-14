@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
 
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 import {
   Container,
@@ -70,11 +74,11 @@ export default class Main extends React.Component {
               </Container>
             </div>
             <div className='contents'>
-              <Container fluid>
+              <Container fluid >
                 <div>
                 <Search searchtext={this.state.searchText} open={this.state.openList} />
                 <Shops open={this.state.openShop}/>
-              </div>
+                </div>
               </Container>
             </div>
             <div className='footer'>
