@@ -7,18 +7,78 @@ import {
   CardTitle,
   CardText
 } from 'material-ui/Card';
-import {Container, Row, Col} from 'reactstrap';
+import {Container,ButtonDropdown ,Form,Input , Button, Row, Col} from 'reactstrap';
 import FlatButton from 'material-ui/FlatButton';
-import './Shops.css'
+import './Shops.css';
+import { listPostFromApi,createPostFromApi} from 'api/posts.js';
+import PostList from './PostList.jsx';
 
 export default class Shops extends React.Component {
   constructor(props) {
-    super(props);
+  super(props);
+    this.inputEl = null;
+        this.state = {
+            inputValue: '',
+            formToggle: false,
+            posts: []
+        };
+
+    this.createPost = this.createPosts.bind(this);
+    this.listPost = this.listPost.bind(this);
+    this.handleFormToggle = this.handleFormToggle.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+  handleInputChange(e) {
+    this.setState({inputValue: e.target.value});
+}
+
+  handleFormToggle() {
+        this.setState((prevState, props) => ({
+            formToggle: !prevState.formToggle
+        }));
+    }
+
+  handleSubmit(e) {
+        e.preventDefault();
+
+        this.inputEl.blur();
+        if (this.state.inputValue && this.state.inputValue.trim()) {
+            this.createPosts(this.state.inputValue,this.props.rests[this.props.shopIndex].id);
+            this.handleFormToggle();
+        } else {
+            this.state.inputEl = '';
+        }
+    }
+
+    listPost(r_id) {
+      listPostFromApi(r_id).then(posts => {
+        this.setState({
+          posts:posts
+          }, () => {
+            console.log("ajax call", this.state.posts);
+          });
+        }).catch(err => {
+          console.error('Error listing posts', err);
+          this.setState({posts: []});
+        });
+    }
+
+    createPosts(text,r_id) {
+        createPostFromApi(text,r_id).then(posts => {
+            this.listPost(r_id);
+            console.log("ajax call", this.state.posts);
+        }).catch(err => {
+          console.error('Error listing posts', err);
+          this.setState({posts: []});
+        });
+    }
+
+  componentWillMount(){
+    this.listPost(this.props.rests[this.props.shopIndex].id);
   }
 
   render() {
-    console.log(this.props.shopIndex);
-    console.log(this.props.posts[this.props.shopIndex]);
     return (
 
       <div className='wrapper'>
@@ -28,15 +88,15 @@ export default class Shops extends React.Component {
               <Row>
                 <Col sm="auto">
 
-                  <img src={this.props.posts[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.posts[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
+                  <img src={this.props.rests[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
                 </Col>
                 <Col sm="8">
                   <div>
                     <Row>
-                      <div className="store-name">{this.props.posts[this.props.shopIndex].name}</div>
+                      <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
                     </Row>
                     <Row>
-                      <div className="store-attributes">{`${this.props.posts[this.props.shopIndex].address}`}</div>
+                      <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
                     </Row>
                   </div>
 
@@ -57,15 +117,15 @@ export default class Shops extends React.Component {
                 <Card>
                   <CardTitle title="詳細資料"/>
                   <CardText>
-                    <i className="fa fa-cutlery" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.posts[this.props.shopIndex].name}
+                    <i className="fa fa-cutlery" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].name}
                     <br/><br/>
-                    <i className="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.posts[this.props.shopIndex].category}
+                    <i className="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].category}
                   <br/><br/>
-                    <i className="fa fa-map-marker" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.posts[this.props.shopIndex].address}
+                    <i className="fa fa-map-marker" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].address}
                     <br/><br/>
-                    <i className="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.posts[this.props.shopIndex].average}元
+                    <i className="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].average}元
                     <br/><br/>
-                    <i className="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.posts[this.props.shopIndex].telephon}
+                    <i className="fa fa-phone" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].telephon}
                     <br/>
                   </CardText>
                 </Card>
@@ -87,19 +147,27 @@ export default class Shops extends React.Component {
                   <Card>
                     <CardTitle title="參考文章"/>
                     <CardText>
-                      {this.props.posts[this.props.shopIndex].review1 !== '-1'
-                        ? <a href={this.props.posts[this.props.shopIndex].review1}>iPeen參考文章1<br/></a>
+                      {this.props.rests[this.props.shopIndex].review1 !== '-1'
+                        ? <a href={this.props.rests[this.props.shopIndex].review1}>iPeen參考文章1<br/></a>
                         : <p>目前暫無文章</p>}
-                      {(this.props.posts[this.props.shopIndex].review2 !== '-1') &&< a href = {
-                        this.props.posts[this.props.shopIndex].review2
+                      {(this.props.rests[this.props.shopIndex].review2 !== '-1') &&< a href = {
+                        this.props.rests[this.props.shopIndex].review2
                       } > iPeen參考文章2 < br />< /a>}
-                      {(this.props.posts[this.props.shopIndex].review3 !== '-1') &&< a href = {
-                        this.props.posts[this.props.shopIndex].review3
+                      {(this.props.rests[this.props.shopIndex].review3 !== '-1') &&< a href = {
+                        this.props.rests[this.props.shopIndex].review3
                       } > iPeen參考文章3 < br />< /a>}
                     </CardText>
                   </Card>
                 </div>
               </Row>
+              <PostList className="postList" posts={this.state.posts}/>
+                <div className={`post-form`}>{this.state.formToggle ?
+                <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
+                        <Input type='text' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
+                        <Button color="info">Check</Button>
+                    </Form>
+                    :<Button className='btn-form' outline color="info" onClick={this.handleFormToggle}>給點建議...<i className='fa fa-map-marker' aria-hidden="true"></i>&nbsp;&nbsp;{this.props.city}</Button>
+                }</div>
             </Col>
           </Row>
         </Container>
