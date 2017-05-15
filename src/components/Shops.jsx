@@ -132,16 +132,27 @@ export default class Shops extends React.Component {
               </div>
             </Col>
             <Col sm="8">
-              <Row>
+              {/* <Row>
                 <div className='slide-show'>
                   <h3>slide show</h3>
                 </div>
-              </Row>
+              </Row> */}
               <Row>
-                <div className='post'>
-                  <h3>post</h3>
+                <div className="post-list">
+                  <Card>
+                    <CardTitle title="評論"/>
+                    <PostList className="postList" posts={this.state.posts}/>
+                      <div className={`post-form`}>{this.state.formToggle ?
+                      <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
+                              <Input type='text' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
+                              <Button color="danger">發表</Button>
+                          </Form>
+                          :<Button className='btn-form'  onClick={this.handleFormToggle}><i className='fa fa-commenting' aria-hidden="true"></i>&nbsp;&nbsp;給點建議&nbsp;&nbsp;</Button>
+                      }</div>
+                  </Card>
                 </div>
               </Row>
+
               <Row>
                 <div className="reference">
                   <Card>
@@ -160,14 +171,7 @@ export default class Shops extends React.Component {
                   </Card>
                 </div>
               </Row>
-              <PostList className="postList" posts={this.state.posts}/>
-                <div className={`post-form`}>{this.state.formToggle ?
-                <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
-                        <Input type='text' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
-                        <Button color="info">Check</Button>
-                    </Form>
-                    :<Button className='btn-form' outline color="info" onClick={this.handleFormToggle}>給點建議...<i className='fa fa-map-marker' aria-hidden="true"></i>&nbsp;&nbsp;{this.props.city}</Button>
-                }</div>
+
             </Col>
           </Row>
         </Container>

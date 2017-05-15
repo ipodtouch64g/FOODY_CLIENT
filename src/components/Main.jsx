@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
-import { useRouterHistory } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import createHistory from 'history/createBrowserHistory'
 // Needed for onTouchTap
@@ -48,6 +47,7 @@ export default class Main extends React.Component {
     this.listPosts = this.listPosts.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
+    this.handleADVsearch = this.handleADVsearch.bind(this);
   }
   handleSearchItemClick(index){
     this.setState({
@@ -89,7 +89,25 @@ export default class Main extends React.Component {
       });
     });
   }
-
+  handleADVsearch(place,catagory,price){
+    this.setState({
+      Loading: true
+    }, () => {
+      searchListFromApi(this.state.searchText,place,catagory,price).then(posts => {
+        this.setState({
+          posts,
+          Loading: false
+        }, () => {
+          console.log("ajax call", this.state.posts);
+          let a = "/list/"+this.state.searchText;
+          history.push(a) ;
+        });
+      }).catch(err => {
+        console.error('Error listing posts', err);
+        this.setState({posts: [], Loading: false});
+      });
+    });
+  }
   render() {
     return (
       <Router history={history}>
@@ -119,8 +137,8 @@ export default class Main extends React.Component {
               </Container>
             </div>
             <div className='contents'>
-              <Route exact path="/" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/list" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route exact path="/" render={() => (<SearchList searchfrommain={this.handleADVsearch} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/list" render={() => (<SearchList searchfrommain={this.handleADVsearch} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
               <Route path="/shop" render={() => (<Shops rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>

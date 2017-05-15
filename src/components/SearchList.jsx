@@ -51,7 +51,7 @@ export default class SearchList extends React.Component {
           <Container>
             <Row>
               <Col sm="4" className="advance-search-col">
-                <div className="advance-search-bar"><SearchSidebar/></div>
+                <div className="advance-search-bar"><SearchSidebar onSearch={this.props.searchfrommain}/></div>
               </Col>
               <Col sm="8">
                 <div className="wrapper-cards">{children}</div>

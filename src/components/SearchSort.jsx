@@ -39,22 +39,25 @@ export default class SearchSort extends React.Component {
 
   render() {
     return (
-      <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-        <DropdownToggle caret size="sm">
-          {this.state.chosen}
-        </DropdownToggle>
-        <DropdownMenu>
-          <DropdownItem>
-            <div onClick={this.changeRec}>推薦順序</div>
-          </DropdownItem>
-          <DropdownItem>
-            <div onClick={this.changeBS}>金額：由大至小</div>
-          </DropdownItem>
-          <DropdownItem>
-            <div onClick={this.changeSB}>金額：由小至大</div>
-          </DropdownItem>
-        </DropdownMenu>
-      </ButtonDropdown>
+      <div className="button">
+        <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+          <DropdownToggle caret size="sm">
+            {this.state.chosen}
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem>
+              <div onClick={this.changeRec}>推薦順序</div>
+            </DropdownItem>
+            <DropdownItem>
+              <div onClick={this.changeBS}>金額：由大至小</div>
+            </DropdownItem>
+            <DropdownItem>
+              <div onClick={this.changeSB}>金額：由小至大</div>
+            </DropdownItem>
+          </DropdownMenu>
+        </ButtonDropdown>
+      </div>
+
     );
   }
 }
