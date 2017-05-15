@@ -27,7 +27,8 @@ export default class Shops extends React.Component {
             <Container fluid>
               <Row>
                 <Col sm="auto">
-                  <img src={`${this.props.posts[this.props.shopIndex].image}`} className="title-image" height="200" width="200 "alt=""/>
+
+                  <img src={this.props.posts[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.posts[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
                 </Col>
                 <Col sm="8">
                   <div>

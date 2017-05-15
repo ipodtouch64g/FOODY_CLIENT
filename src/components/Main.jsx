@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import { useRouterHistory } from 'react-router'
 import injectTapEventPlugin from 'react-tap-event-plugin';
-
+import createHistory from 'history/createBrowserHistory'
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
-
+const history = createHistory();
+const location = history.location;
+const unlisten = history.listen((location, action) => {
+  // location is an object like window.location
+  console.log(action, location.pathname, location.state)
+})
 import {
   Container,
   Collapse,
@@ -74,6 +80,8 @@ export default class Main extends React.Component {
           Loading: false
         }, () => {
           console.log("ajax call", this.state.posts);
+          let a = "/list/"+searchText;
+          history.push(a) ;
         });
       }).catch(err => {
         console.error('Error listing posts', err);
@@ -84,7 +92,7 @@ export default class Main extends React.Component {
 
   render() {
     return (
-      <Router>
+      <Router history={history}>
         <MuiThemeProvider>
           <div className='main'>
             <div className='bg'>
@@ -112,6 +120,7 @@ export default class Main extends React.Component {
             </div>
             <div className='contents'>
               <Route exact path="/" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/list" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
               <Route path="/shop" render={() => (<Shops posts={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>

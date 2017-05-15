@@ -16,7 +16,28 @@ const languages = [
         name: '台中',
         year: 1972
       }, {
-        name: '台難',
+        name: '台南',
+        year: 1972
+      }, {
+        name: '高雄',
+        year: 1972
+      }
+    ]
+  },
+  {
+    title: '食物',
+    languages: [
+      {
+        name: '牛排',
+        year: 1972
+      }, {
+        name: '牛肉麵',
+        year: 1972
+      }, {
+        name: '排骨',
+        year: 1972
+      }, {
+        name: '咖哩',
         year: 1972
       }
     ]
@@ -80,7 +101,10 @@ export default class SearchBar extends React.Component {
   }
 
   onChange = (event, {newValue, method}) => {
-    this.setState({value: newValue});
+    this.setState({value: newValue},()=>{
+      console.log(this.state.value);
+
+    });
   };
 
   onSuggestionsFetchRequested = ({value}) => {
@@ -103,7 +127,7 @@ export default class SearchBar extends React.Component {
 
       } else {
         this.props.onSearch(suggestionValue);
-        
+
       }
     } else {
       this.setState({value: ''});

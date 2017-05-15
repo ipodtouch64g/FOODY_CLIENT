@@ -35,7 +35,7 @@ export default class SearchItem extends React.Component {
             <Card className="card">
               <CardTitle title={this.props.name} subtitle={this.props.address}/>
 
-              <img className="images" alt="X" src={this.props.image} height="120" width="120"/>
+              <img className="images"  src={this.props.image==='-1'?'../images/default.png':this.props.image} height="120" width="120"/>
               <CardTitle className="title" title={this.props.category} subtitle={`均消 : ${this.props.average}元`}/>
             </Card>
           </a>
