@@ -121,7 +121,7 @@ export default class Main extends React.Component {
             <div className='contents'>
               <Route exact path="/" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
               <Route path="/list" render={() => (<SearchList posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/shop" render={() => (<Shops posts={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
+              <Route path="/shop" render={() => (<Shops rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>
               FOODY | BY TEAM SIX
