@@ -40,7 +40,7 @@ export default class SearchList extends React.Component {
                 <h4>{this.props.searchText?this.props.searchText:""}</h4>
               </Col>
               <Col>
-                <div className="search-sort">{this.props.searchText?<SearchSort/>:"飲食男女，人之大慾存焉。"}</div>
+                <div className="search-sort">{this.props.searchText?<SearchSort/>:"FOODY |"}</div>
               </Col>
             </Row>
           </Container>

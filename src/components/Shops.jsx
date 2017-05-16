@@ -12,7 +12,7 @@ import FlatButton from 'material-ui/FlatButton';
 import './Shops.css';
 import { listPostFromApi,createPostFromApi} from 'api/posts.js';
 import PostList from './PostList.jsx';
-
+import Map from './Map.jsx'
 export default class Shops extends React.Component {
   constructor(props) {
   super(props);
@@ -86,12 +86,15 @@ export default class Shops extends React.Component {
           <div className="wrapper-title">
             <Container fluid>
               <Row>
+                <div className="map">
+                  <Map lat={this.props.rests[this.props.shopIndex].lat} lng={this.props.rests[this.props.shopIndex].lng}/>
+                </div>
                 <Col sm="auto">
 
                   <img src={this.props.rests[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
                 </Col>
                 <Col sm="8">
-                  <div>
+                  <div className="text">
                     <Row>
                       <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
                     </Row>

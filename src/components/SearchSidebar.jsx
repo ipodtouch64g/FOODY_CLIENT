@@ -233,7 +233,28 @@ export default class SearchSidebar extends React.Component {
               nestedItems={[
                 <ListItem
                   key={1}
-                  primaryText="日式料理"
+                  primaryText="中式料理"
+                  disabled={true}
+                  nestedItems={[     
+                    <ListItem key={1} primaryText="海鮮餐廳"  />,
+                    <ListItem key={2} primaryText="山產野菜餐廳"  />,
+                    <ListItem key={3} primaryText="北京菜"  />,
+                    <ListItem key={4} primaryText="客家菜"  />,
+                    <ListItem key={5} primaryText="四川菜"  />,
+                    <ListItem key={6} primaryText="湘菜(湖南菜)"  />,
+                    <ListItem key={7} primaryText="台菜餐廳"  />,
+                    <ListItem key={8} primaryText="上海菜(江浙菜)"  />,
+                    <ListItem key={9} primaryText="粵菜"  />,
+                    <ListItem key={10} primaryText="港式飲茶"  />,
+                    <ListItem key={11} primaryText="麵食點心"  />,
+                    <ListItem key={12} primaryText="其它中式料理"  />,
+                    <ListItem key={13} primaryText="熱炒、快炒"  />,
+                    <ListItem key={14} primaryText="台灣原住民料理"  />,
+                    <ListItem key={15} primaryText="新疆菜"  />,
+                    <ListItem key={16} primaryText="西藏菜"  />,
+                    <ListItem key={17} primaryText="雲南菜"  />,
+                    <ListItem key={18} primaryText="眷村菜"  />
+                  ]}
                 />,
                 <ListItem
                   key={2}

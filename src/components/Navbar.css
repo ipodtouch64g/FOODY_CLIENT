@@ -1,0 +1,4 @@
+.close{
+    display: inline-flex;
+    justify-content: flex-end;
+}
