@@ -18,7 +18,7 @@ export default class AddDialog extends React.Component {
       valueName: 'Restaurant Name',
       valueCategory: 'Restaurant Category',
       valueAddress: 'Restaurant address',
-      valueAverage: 'Restaurant Average',
+      valueAverage: 100,
       valueTelephone: 'Restaurant Telephone'
     };
 
@@ -82,13 +82,12 @@ export default class AddDialog extends React.Component {
     return (
       <div>
         <Dialog
-          title="Dialog With Date Picker"
+          title="新增餐廳"
           actions={actions}
           modal={false}
           open={this.props.open}
           onRequestClose={this.handleClose}
         >
-          餐廳加加
           <div>
             <TextField
               value={this.state.valueName}

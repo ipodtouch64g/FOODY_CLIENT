@@ -2,3 +2,7 @@
     display: inline-flex;
     justify-content: flex-end;
 }
+.fbicon{
+  background-color: transparent;
+  border: transparent;
+}

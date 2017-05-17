@@ -10,6 +10,7 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import './Navbar.css'
 import ActionPermIdentity from 'material-ui/svg-icons/action/perm-identity'
 import ActionNoteAdd from 'material-ui/svg-icons/action/note-add'
+import SocialPersonAdd from 'material-ui/svg-icons/social/person-add'
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import Dialog from 'material-ui/Dialog';
 import SignUpPage from './SignUpPage.jsx';
@@ -17,7 +18,7 @@ import LoginPage from './LoginPage.jsx';
 import {white, blue500, red500, greenA200} from 'material-ui/styles/colors';
 import SvgIcon from 'material-ui/SvgIcon';
 import AddDialog from './AddDialog.jsx'
-
+import FacebookLogin from 'react-facebook-login';
 const styles = {
   smallIcon: {
     width: 36,
@@ -42,6 +43,9 @@ const styles = {
     width: 96,
     height: 96,
     padding: 24
+  },
+  no:{
+    display:'none'
   },
   h:{
     color:'white',
@@ -91,23 +95,26 @@ export default class MyNavbar extends React.Component {
   };
   handleChange = (event, index, value) => this.setState({value});
 
+
   render() {
+    console.log(this.props.isFBLogin.length?styles.no:styles.medium)
     return (
       <div>
         <Toolbar className="navbar">
 
           <ToolbarGroup>
 
-              <IconButton hoveredStyle={styles.h} onTouchTap={this.handleOpenS} iconStyle={styles.mediumIcon} style={styles.medium} tooltip="註冊">
-                <ActionPermIdentity/>
+
+              <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={this.props.isFBLogin?styles.no:styles.mediumIcon} style={this.props.isFBLogin?styles.no:styles.medium} tooltip="登入">
+                <FacebookLogin  cssClass="fbicon" icon={<ActionPermIdentity color="white" style={styles.mediumIcon}/>} textButton="" appId="1674155752890129" autoLoad={true} fields="name,email,picture" callback={this.props.fblogin}/>
               </IconButton>
 
+                <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={this.props.isFBLogin?styles.mediumIcon:styles.no} style={this.props.isFBLogin?styles.medium:styles.no} tooltip="登出">
+                  <FacebookLogin  cssClass="fbicon" icon={<ActionPermIdentity color="darkorange" style={styles.mediumIcon}/>} textButton="" appId="1674155752890129" autoLoad={true} fields="name,email,picture" callback={this.props.fblogout}/>
+                </IconButton>
 
-            <ToolbarSeparator/>
 
-            <IconButton className="icb" hoveredStyle={styles.h} onTouchTap={this.handleOpenL} iconStyle={styles.mediumIcon} style={styles.medium} tooltip="登入">
-              <ActionPermIdentity/>
-            </IconButton>
+
 
 
 
