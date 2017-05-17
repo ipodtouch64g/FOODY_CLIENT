@@ -16,6 +16,7 @@ import SignUpPage from './SignUpPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import {white, blue500, red500, greenA200} from 'material-ui/styles/colors';
 import SvgIcon from 'material-ui/SvgIcon';
+import AddDialog from './AddDialog.jsx'
 
 const styles = {
   smallIcon: {
@@ -55,19 +56,16 @@ const styles = {
   }
 };
 
-export default class Navbar extends React.Component {
+export default class MyNavbar extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       value: 3,
       openlogin: false,
-      opensignup: false
+      opensignup: false,
+      openAdd:false
     };
-    this.handleOpenL = this.handleOpenL.bind(this);
-    this.handleCloseL = this.handleCloseL.bind(this);
-    this.handleOpenS = this.handleOpenS.bind(this);
-    this.handleCloseS = this.handleCloseS.bind(this);
   }
   handleOpenS = () => {
     this.setState({opensignup: true});
@@ -82,6 +80,14 @@ export default class Navbar extends React.Component {
 
   handleCloseL = () => {
     this.setState({openlogin: false});
+  };
+
+  handleOpenA = () => {
+    this.setState({openAdd: true});
+  };
+
+  handleCloseA = () => {
+    this.setState({openAdd: false});
   };
   handleChange = (event, index, value) => this.setState({value});
 
@@ -106,7 +112,7 @@ export default class Navbar extends React.Component {
 
 
             <ToolbarSeparator/>
-            <IconButton className="icb" hoveredStyle={styles.h} iconStyle={styles.mediumIcon} style={styles.medium} tooltip="新增餐廳">
+            <IconButton className="icb" hoveredStyle={styles.h} onTouchTap={this.handleOpenA} iconStyle={styles.mediumIcon} style={styles.medium} tooltip="新增餐廳">
               <ActionNoteAdd/>
             </IconButton>
           </ToolbarGroup>
@@ -120,9 +126,11 @@ export default class Navbar extends React.Component {
 
         <Dialog modal={false} open={this.state.openlogin} className="dialog">
           <LoginPage/>
-          <RaisedButton onTouchTap={this.handleCloseL} label="Close" className="close"/>
+          <RaisedButton onTouchTap={this.handleCloseL} label="Close" className="close"/></Dialog>
 
-        </Dialog>
+
+        <AddDialog addSubmit = {this.props.addSubmit} open={this.state.openAdd} close={this.handleCloseA} className="dialog"/>
+
       </div>
 
     );

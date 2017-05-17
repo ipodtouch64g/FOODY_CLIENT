@@ -41,7 +41,7 @@ export default class SearchSidebar extends React.Component {
    this.setState({
      city:searchText
    },()=>{
-     this.props.onSearch(this.state.searchText,this.state.category,this.state.price);
+     this.props.onSearch(this.state.city,this.state.category,this.state.price);
      console.log("handlecityclick",this.state);
    });
 
@@ -50,7 +50,7 @@ export default class SearchSidebar extends React.Component {
    this.setState({
      category:cat
    },()=>{
-     this.props.onSearch(this.state.searchText,this.state.category,this.state.price);
+     this.props.onSearch(this.state.city,this.state.category,this.state.price);
      console.log("handlecategoryclick",this.state);
    });
  }
@@ -58,7 +58,7 @@ export default class SearchSidebar extends React.Component {
    this.setState({
      price:price
    },()=>{
-     this.props.onSearch(this.state.searchText,this.state.category,this.state.price);
+     this.props.onSearch(this.state.city ,this.state.category,this.state.price);
      console.log("handlepriceclick",this.state);
    });
  }
@@ -235,7 +235,7 @@ export default class SearchSidebar extends React.Component {
                   key={1}
                   primaryText="中式料理"
                   disabled={true}
-                  nestedItems={[     
+                  nestedItems={[
                     <ListItem key={1} primaryText="海鮮餐廳"  />,
                     <ListItem key={2} primaryText="山產野菜餐廳"  />,
                     <ListItem key={3} primaryText="北京菜"  />,

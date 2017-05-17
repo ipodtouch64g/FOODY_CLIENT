@@ -40,7 +40,7 @@ export default class SearchList extends React.Component {
                 <h4>{this.props.searchText?this.props.searchText:""}</h4>
               </Col>
               <Col>
-                <div className="search-sort">{this.props.searchText?<SearchSort/>:"FOODY |"}</div>
+                <div className="search-sort">{this.props.searchText?<SearchSort reSort={this.props.reSort}/>:"FOODY |"}</div>
               </Col>
             </Row>
           </Container>
@@ -51,7 +51,7 @@ export default class SearchList extends React.Component {
           <Container>
             <Row>
               <Col sm="4" className="advance-search-col">
-                <div className="advance-search-bar"><SearchSidebar onSearch={this.props.searchfrommain}/></div>
+                <div className="advance-search-bar"><SearchSidebar onSearch={this.props.ADVsearch}/></div>
               </Col>
               <Col sm="8">
                 <div className="wrapper-cards">{children}</div>
