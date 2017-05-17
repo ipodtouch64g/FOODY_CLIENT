@@ -15,16 +15,16 @@ const geolocation = (canUseDOM && navigator.geolocation
   }));
 
 const GeolocationExampleGoogleMap = withGoogleMap(props => (
-  <GoogleMap defaultZoom={12} center={props.center}>
+  <GoogleMap defaultZoom={15} center={props.center}>
     {props.center && (
       <InfoWindow position={props.center}>
         <div>{props.content}</div>
       </InfoWindow>
     )}
     {props.center && (<Circle center={props.center} radius={props.radius} options={{
-      fillColor: `red`,
+      fillColor: `green`,
       fillOpacity: 0.20,
-      strokeColor: `red`,
+      strokeColor: `green`,
       strokeOpacity: 1,
       strokeWeight: 1
     }}/>)}
@@ -38,7 +38,7 @@ export default class FoodMap extends React.Component {
     this.state = {
       center: null,
       content: null,
-      radius: 6000
+      radius: 500
     };
 
     this.isUnmounted = false;
@@ -67,7 +67,10 @@ export default class FoodMap extends React.Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         },
-        content: `Location found using HTML5.`
+        content: `你在這兒.`
+      },()=>{
+        console.log("lat",this.state.center.lat,"lng",this.state.center.lng);
+        // Call API HERE!
       });
 
       raf(tick);
