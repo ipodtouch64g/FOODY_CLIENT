@@ -7,21 +7,30 @@ import {
   CardTitle,
   CardText
 } from 'material-ui/Card';
-import {Container,ButtonDropdown ,Form,Input , Button, Row, Col} from 'reactstrap';
+import {
+  Container,
+  ButtonDropdown,
+  Form,
+  Input,
+  Button,
+  Row,
+  Col
+} from 'reactstrap';
 import FlatButton from 'material-ui/FlatButton';
 import './Shops.css';
-import { listPostFromApi,createPostFromApi} from 'api/posts.js';
+
+import {listPostFromApi, createPostFromApi} from 'api/posts.js';
 import PostList from './PostList.jsx';
 import Map from './Map.jsx'
 export default class Shops extends React.Component {
   constructor(props) {
-  super(props);
+    super(props);
     this.inputEl = null;
-        this.state = {
-            inputValue: '',
-            formToggle: false,
-            posts: []
-        };
+    this.state = {
+      inputValue: '',
+      formToggle: false,
+      posts: []
+    };
 
     this.createPost = this.createPosts.bind(this);
     this.listPost = this.listPost.bind(this);
@@ -31,50 +40,50 @@ export default class Shops extends React.Component {
   }
   handleInputChange(e) {
     this.setState({inputValue: e.target.value});
-}
+  }
 
   handleFormToggle() {
-        this.setState((prevState, props) => ({
-            formToggle: !prevState.formToggle
-        }));
-    }
+    this.setState((prevState, props) => ({
+      formToggle: !prevState.formToggle
+    }));
+  }
 
   handleSubmit(e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        this.inputEl.blur();
-        if (this.state.inputValue && this.state.inputValue.trim()) {
-            this.createPosts(this.state.inputValue,this.props.rests[this.props.shopIndex].id);
-            this.handleFormToggle();
-        } else {
-            this.state.inputEl = '';
-        }
+    this.inputEl.blur();
+    if (this.state.inputValue && this.state.inputValue.trim()) {
+      this.createPosts(this.state.inputValue, this.props.rests[this.props.shopIndex].id);
+      this.handleFormToggle();
+    } else {
+      this.state.inputEl = '';
     }
+  }
 
-    listPost(r_id) {
-      listPostFromApi(r_id).then(posts => {
-        this.setState({
-          posts:posts
-          }, () => {
-            console.log("ajax call", this.state.posts);
-          });
-        }).catch(err => {
-          console.error('Error listing posts', err);
-          this.setState({posts: []});
-        });
-    }
+  listPost(r_id) {
+    listPostFromApi(r_id).then(posts => {
+      this.setState({
+        posts: posts
+      }, () => {
+        console.log("ajax call", this.state.posts);
+      });
+    }).catch(err => {
+      console.error('Error listing posts', err);
+      this.setState({posts: []});
+    });
+  }
 
-    createPosts(text,r_id) {
-        createPostFromApi(text,r_id).then(posts => {
-            this.listPost(r_id);
-            console.log("ajax call", this.state.posts);
-        }).catch(err => {
-          console.error('Error listing posts', err);
-          this.setState({posts: []});
-        });
-    }
+  createPosts(text, r_id) {
+    createPostFromApi(text, r_id).then(posts => {
+      this.listPost(r_id);
+      console.log("ajax call", this.state.posts);
+    }).catch(err => {
+      console.error('Error listing posts', err);
+      this.setState({posts: []});
+    });
+  }
 
-  componentWillMount(){
+  componentWillMount() {
     this.listPost(this.props.rests[this.props.shopIndex].id);
   }
 
@@ -83,36 +92,36 @@ export default class Shops extends React.Component {
 
       <div className='wrapper'>
 
-          <div className="wrapper-title">
-            <Container fluid>
-              <Row>
-                <div className="map">
-                  <Map lat={this.props.rests[this.props.shopIndex].lat} lng={this.props.rests[this.props.shopIndex].lng}/>
+        <div className="wrapper-title">
+          <Container fluid>
+            <Row>
+              <div className="map">
+                <Map lat={this.props.rests[this.props.shopIndex].lat} lng={this.props.rests[this.props.shopIndex].lng}/>
+              </div>
+              <Col sm="auto">
+                <a href={"https://www.google.com.tw/maps/search/" + this.props.rests[this.props.shopIndex].name}>
+                  <img src={this.props.rests[this.props.shopIndex].image === '-1'
+                    ? '../images/default.png'
+                    : this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 " alt=""/>
+                </a>
+              </Col>
+              <Col sm="8">
+                <div className="text">
+                  <Row>
+                    <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
+                  </Row>
+                  <Row>
+                    <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
+                  </Row>
                 </div>
-                <Col sm="auto">
 
-                  <img src={this.props.rests[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
-                </Col>
-                <Col sm="8">
-                  <div className="text">
-                    <Row>
-                      <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
-                    </Row>
-                    <Row>
-                      <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
-                    </Row>
-                  </div>
+              </Col>
+            </Row>
 
-                </Col>
-              </Row>
-
-            </Container>
-          </div>
+          </Container>
+        </div>
 
         <Container>
-
-
-
 
           <Row>
             <Col sm="4" className="description-col">
@@ -123,7 +132,7 @@ export default class Shops extends React.Component {
                     <i className="fa fa-cutlery" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].name}
                     <br/><br/>
                     <i className="fa fa-hashtag" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].category}
-                  <br/><br/>
+                    <br/><br/>
                     <i className="fa fa-map-marker" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].address}
                     <br/><br/>
                     <i className="fa fa-usd" aria-hidden="true"></i>&nbsp;&nbsp;{this.props.rests[this.props.shopIndex].average}元
@@ -145,13 +154,16 @@ export default class Shops extends React.Component {
                   <Card>
                     <CardTitle title="評論"/>
                     <PostList className="postList" posts={this.state.posts}/>
-                      <div className={`post-form`}>{this.state.formToggle ?
-                      <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
-                              <Input type='text' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
-                              <Button color="danger">發表</Button>
+                    <div className={`post-form`}>{this.state.formToggle
+                        ? <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
+                            <Input type='text' name='postText' getRef={el => {
+                              this.inputEl = el
+                            }} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
+                            <Button color="danger">發表</Button>
                           </Form>
-                          :<Button className='btn-form'  onClick={this.handleFormToggle}><i className='fa fa-commenting' aria-hidden="true"></i>&nbsp;&nbsp;給點建議&nbsp;&nbsp;</Button>
-                      }</div>
+                        : <Button className='btn-form' onClick={this.handleFormToggle}>
+                          <i className='fa fa-commenting' aria-hidden="true"></i>&nbsp;&nbsp;給點建議&nbsp;&nbsp;</Button>
+}</div>
                   </Card>
                 </div>
               </Row>

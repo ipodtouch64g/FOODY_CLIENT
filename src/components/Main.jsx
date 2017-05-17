@@ -25,6 +25,16 @@ import Recommend from './Recommend.jsx'
 import './Main.css';
 import MyNavbar from './Navbar.jsx'
 import SignUpPage from './SignUpPage.jsx'
+/* 新的地圖*/
+import MapsPlace from 'material-ui/svg-icons/maps/place';
+import SvgIcon from 'material-ui/SvgIcon';
+import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import {fullWhite} from 'material-ui/styles/colors';
+import FoodMap from './FoodMap.jsx'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+/* 新的地圖*/
 export default class Main extends React.Component {
 
   constructor(props) {
@@ -45,6 +55,7 @@ export default class Main extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
     this.handleADVsearch = this.handleADVsearch.bind(this);
+
   }
   handleSearchItemClick(index) {
     this.setState({openList: false, openShop: true, indexOfList: index});
@@ -60,20 +71,26 @@ export default class Main extends React.Component {
   }
 
   handleFBLogin = (response) => {
-    console.log(response);
-    this.setState({
-      FBLoginin: response,
-      FBLoggedIn: true
-    }, () => {
-      console.log(this.state)
-    });
+    if (response.status === "unknown")
+      return;
+    else {
+      this.setState({
+        FBLoginin: response,
+        FBLoggedIn: true
+      }, () => {
+        console.log("handleFBLogin", this.state)
+      });
+    }
+
   }
+
   handleFBLogout = () => {
+
     this.setState({
       FBLoginin: [],
       FBLoggedIn: false
     }, () => {
-      console.log(this.state)
+      console.log("fblogout", this.state)
     });
   }
 
@@ -155,28 +172,56 @@ export default class Main extends React.Component {
           <div className='main'>
             <div className='bg'>
               <Container fluid>
+
                 <div className="navbar">
                   <MyNavbar isFBLogin={this.state.FBLoggedIn} fblogout={this.handleFBLogout} fblogin={this.handleFBLogin} addSubmit={this.handleAddRestaurant}/>
                 </div>
-                <div className='container d-flex flex-column  justify-content-between align-items:center '>
-                  &nbsp;
-                  <div></div>
-                  <div className="mx-auto wow fadeInDown main-title">
+                {/* 新map */}
+                <div className="main-map-or-search">
+                  <Route exact path="/" render={() => (
+                    <div className='container d-flex flex-column justify-content-between align-items:center '>
+                      &nbsp;
+                      <div></div>
+                      <div className="mx-auto wow fadeInDown main-title">
+                        <div>
+                          <h1>FOODY |</h1>
+                        </div>
+                        <div>
+                          <h3>your choice for food</h3>
+                        </div>
+                      </div>
+                      &nbsp; &nbsp; &nbsp;
+                      <div className='container align-items:center searchBar'>
+                        <div className='container searchIcon'>
+                          <i className="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                        <SearchBar onSearch={this.handleSearch}/> {/* 新map案件 */}
+                        <div className="the-fucking-button">
+                          <Link to={`/map`}>
+                            <RaisedButton labelColor="#FFF" label="食起來" labelPosition="before" backgroundColor="#a4c639" icon={< MapsPlace color = {
+                              fullWhite
+                            } />}/>
+                          </Link>
+                        </div>
+                        {/* 新map案件 */}
+                      </div>
+                    </div>
+                  )}/>
+                  {/* 新map */}
+                  <Route path="/map" render={() => (
                     <div>
-                      <h1>FOODY |</h1>
+                      <FoodMap/>
+                      <Link to={'/'}>
+                        < FloatingActionButton secondary={true} style={{float:"right"}}>
+                          <ActionHighlightOff/>
+                        < /FloatingActionButton>
+                      </Link>
                     </div>
-                    <div>
-                      <h3>your choice for food</h3>
-                    </div>
-                  </div>
-                  &nbsp; &nbsp; &nbsp;
-                  <div className='container align-items:center searchBar'>
-                    <div className='container searchIcon'>
-                      <i className="fa fa-search" aria-hidden="true"></i>
-                    </div>
-                    <SearchBar onSearch={this.handleSearch}/>
-                  </div>
+                  )
+                  }/>
+
                 </div>
+
               </Container>
             </div>
             <div className='contents'>
