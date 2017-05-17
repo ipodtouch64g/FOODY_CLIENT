@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import createHistory from 'history/createBrowserHistory'
+import { useRouterHistory } from 'react-router'
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -17,11 +18,11 @@ import {Container, Collapse, Input, Button} from 'reactstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
 import SearchList from './SearchList.jsx'
-import {searchListFromApi} from 'api/posts.js'
+import {searchListFromApi,sortListFromApi ,createRest} from 'api/posts.js'
 import Shops from './Shops.jsx'
 import Recommend from './Recommend.jsx'
 import './Main.css';
-import Navbar from './Navbar.jsx'
+import MyNavbar from './Navbar.jsx'
 import SignUpPage from './SignUpPage.jsx'
 export default class Main extends React.Component {
 
@@ -35,6 +36,8 @@ export default class Main extends React.Component {
       Loading: false,
       posts: []
     };
+    this.handleResort = this.handleResort.bind(this);
+    this.handleAddRestaurant = this.handleAddRestaurant.bind(this);
     this.listPosts = this.listPosts.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
@@ -42,6 +45,35 @@ export default class Main extends React.Component {
   }
   handleSearchItemClick(index) {
     this.setState({openList: false, openShop: true, indexOfList: index});
+  }
+  handleAddRestaurant(newRest){
+    createRest(newRest).then(n => {
+        this.listPosts(this.state.searchText);
+        console.log("ajax call", n);
+    }).catch(err => {
+      console.error('Error listing posts', err);
+      this.setState({posts: []});
+    });
+  }
+
+  handleResort(asc){
+    this.setState({
+      Loading: true
+    }, () => {
+      sortListFromApi(this.state.searchText,asc).then(posts => {
+        this.setState({
+          posts,
+          Loading: false
+        }, () => {
+          console.log("ajax call", this.state.posts);
+          let a = "/list/"+this.state.searchText;
+          history.push(a) ;
+        });
+      }).catch(err => {
+        console.error('Error listing posts', err);
+        this.setState({posts: [], Loading: false});
+      });
+    });
   }
 
   handleSearch(searchtext) {
@@ -100,11 +132,11 @@ export default class Main extends React.Component {
       <Router history={history}>
         <MuiThemeProvider>
           <div className='main'>
-            
+
             <div className='bg'>
               <Container fluid>
                 <div className="navbar">
-                  <Navbar/>
+                  <MyNavbar addSubmit={this.handleAddRestaurant}/>
                 </div>
                 <div className='container d-flex flex-column  justify-content-between align-items:center '>
                   &nbsp;
@@ -128,8 +160,8 @@ export default class Main extends React.Component {
               </Container>
             </div>
             <div className='contents'>
-              <Route exact path="/" render={() => (<SearchList searchfrommain={this.handleADVsearch} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/list" render={() => (<SearchList searchfrommain={this.handleADVsearch} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route exact path="/" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/list" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
               <Route path="/shop" render={() => (<Shops rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>
