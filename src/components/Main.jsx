@@ -25,6 +25,7 @@ import Recommend from './Recommend.jsx'
 import './Main.css';
 import MyNavbar from './Navbar.jsx'
 import SignUpPage from './SignUpPage.jsx'
+
 import MapsPlace from 'material-ui/svg-icons/maps/place';
 import SvgIcon from 'material-ui/SvgIcon';
 import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off';
@@ -33,7 +34,6 @@ import FontIcon from 'material-ui/FontIcon';
 import {fullWhite} from 'material-ui/styles/colors';
 import FoodMap from './FoodMap.jsx'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-
 
 export default class Main extends React.Component {
 
@@ -60,6 +60,7 @@ export default class Main extends React.Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchItemClick = this.handleSearchItemClick.bind(this);
     this.handleADVsearch = this.handleADVsearch.bind(this);
+
   }
   handleSearchItemClick(index) {
     this.setState({openList: false, openShop: true, indexOfList: index});
@@ -75,6 +76,7 @@ export default class Main extends React.Component {
   }
 
   handleFBLogin = (response) => {
+
     console.log(response);
     if(response.status==='unknown')
       return;
@@ -84,13 +86,16 @@ export default class Main extends React.Component {
     }, () => {
       console.log(this.state)
     });
+
   }
+
   handleFBLogout = () => {
+
     this.setState({
       FBLoginin: {},
       FBLoggedIn: false
     }, () => {
-      console.log(this.state)
+      console.log("fblogout", this.state)
     });
   }
 
@@ -221,9 +226,11 @@ export default class Main extends React.Component {
           <div className='main'>
             <div className='bg'>
               <Container fluid>
+
                 <div className="navbar">
                   <MyNavbar isFBLogin={this.state.FBLoggedIn} fblogout={this.handleFBLogout} fblogin={this.handleFBLogin} addSubmit={this.handleAddRestaurant}/>
                 </div>
+
                 <div className="main-map-or-search">
                   <Route exact path="/" render={() => (
                     <div className='container d-flex flex-column justify-content-between align-items:center '>
@@ -242,7 +249,9 @@ export default class Main extends React.Component {
                         <div className='container searchIcon'>
                           <i className="fa fa-search" aria-hidden="true"></i>
                         </div>
+
                         <SearchBar onSearch={this.handleSearch}/>
+
                         <div className="the-fucking-button">
                           <Link to={`/map`}>
                             <RaisedButton labelColor="#FFF" label="食起來" labelPosition="before" backgroundColor="#a4c639" icon={< MapsPlace color = {
@@ -250,9 +259,11 @@ export default class Main extends React.Component {
                             } />}/>
                           </Link>
                         </div>
+
                       </div>
                     </div>
                   )}/>
+
                   <Route path="/map" render={() => (
                     <div>
                       <FoodMap/>
@@ -264,7 +275,9 @@ export default class Main extends React.Component {
                     </div>
                   )
                   }/>
+
                   </div>
+
               </Container>
             </div>
             <div className='contents'>
