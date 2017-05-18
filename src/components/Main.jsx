@@ -19,13 +19,13 @@ import {Container, Collapse, Input, Button} from 'reactstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
 import SearchList from './SearchList.jsx'
-import {searchListFromApi, sortListFromApi, createRest} from 'api/posts.js'
+import {searchListFromApi , createRest} from 'api/posts.js'
 import Shops from './Shops.jsx'
 import Recommend from './Recommend.jsx'
 import './Main.css';
 import MyNavbar from './Navbar.jsx'
 import SignUpPage from './SignUpPage.jsx'
-/* 新的地圖*/
+
 import MapsPlace from 'material-ui/svg-icons/maps/place';
 import SvgIcon from 'material-ui/SvgIcon';
 import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off';
@@ -34,7 +34,7 @@ import FontIcon from 'material-ui/FontIcon';
 import {fullWhite} from 'material-ui/styles/colors';
 import FoodMap from './FoodMap.jsx'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-/* 新的地圖*/
+
 export default class Main extends React.Component {
 
   constructor(props) {
@@ -47,6 +47,11 @@ export default class Main extends React.Component {
       openShop: false,
       indexOfList: 0,
       Loading: false,
+      ascending: 'no',
+      city: '',
+      category: '',
+      price: 0,
+      hasMore: true,
       posts: []
     };
     this.handleResort = this.handleResort.bind(this);
@@ -71,41 +76,42 @@ export default class Main extends React.Component {
   }
 
   handleFBLogin = (response) => {
-    if (response.status === "unknown")
+
+    console.log(response);
+    if(response.status==='unknown')
       return;
-    else {
-      this.setState({
-        FBLoginin: response,
-        FBLoggedIn: true
-      }, () => {
-        console.log("handleFBLogin", this.state)
-      });
-    }
+    this.setState({
+      FBLoginin: response,
+      FBLoggedIn: true
+    }, () => {
+      console.log(this.state)
+    });
 
   }
 
   handleFBLogout = () => {
 
     this.setState({
-      FBLoginin: [],
+      FBLoginin: {},
       FBLoggedIn: false
     }, () => {
       console.log("fblogout", this.state)
     });
   }
 
-  handleResort(asc) {
+  handleResort(asc){
     this.setState({
-      Loading: true
+      Loading: true,
+      ascending: asc?'ture':'false'
     }, () => {
-      sortListFromApi(this.state.searchText, asc).then(posts => {
+      searchListFromApi(this.state.searchText,this.state.city,this.state.category,this.state.price,this.state.ascending).then(posts => {
         this.setState({
           posts,
           Loading: false
         }, () => {
           console.log("ajax call", this.state.posts);
-          let a = "/list/" + this.state.searchText;
-          history.push(a);
+          let a = "/list/"+this.state.searchText;
+          history.push(a) ;
         });
       }).catch(err => {
         console.error('Error listing posts', err);
@@ -129,12 +135,17 @@ export default class Main extends React.Component {
 
   listPosts(searchText) {
     this.setState({
-      Loading: true
+      Loading: true,
+      city: '',
+      category:'',
+      price:'',
+      ascending: 'no'
     }, () => {
-      searchListFromApi(searchText).then(posts => {
+      searchListFromApi(searchText,this.state.city,this.state.category,this.state.price,this.state.ascending).then(posts => {
         this.setState({
           posts,
-          Loading: false
+          Loading: false,
+          hasMore: true
         }, () => {
           console.log("ajax call", this.state.posts);
           let a = "/list/" + searchText;
@@ -146,11 +157,54 @@ export default class Main extends React.Component {
       });
     });
   }
-  handleADVsearch(place, catagory, price) {
+  handleMoreRests =() =>{
+    if(this.state.posts.length!==0){
+      const start={
+        id:this.state.posts[this.state.posts.length-1].id,
+        average:this.state.posts[this.state.posts.length-1].average
+      };
+      this.setState({
+        Loading: true,
+        hasMore: false
+      }, () => {
+        searchListFromApi(this.state.searchText,this.state.city,this.state.category,this.state.price,this.state.ascending,start).then(newPosts => {
+          if(newPosts.length===0){
+            this.setState({
+              posts:[...this.state.posts,...newPosts],
+              Loading: false,
+              hasMore: false
+            }, () => {
+              console.log("ajax call", this.state.posts);
+              let a = "/list/" + this.state.searchText;
+              history.push(a);
+            });
+          }
+          else{
+            this.setState({
+              posts:[...this.state.posts,...newPosts],
+              Loading: false,
+              hasMore: true
+            }, () => {
+              console.log("ajax call", this.state.posts);
+              let a = "/list/" + this.state.searchText;
+              history.push(a);
+            });
+          }
+        }).catch(err => {
+          console.error('Error listing posts', err);
+          this.setState({posts: [], Loading: false});
+        });
+      });
+    }
+  }
+  handleADVsearch(place, category, price) {
     this.setState({
-      Loading: true
+      Loading: true,
+      city: place,
+      category: category,
+      price: price
     }, () => {
-      searchListFromApi(this.state.searchText, place, catagory, price).then(posts => {
+      searchListFromApi(this.state.searchText,place,category,price,this.state.ascending).then(posts => {
         this.setState({
           posts,
           Loading: false
@@ -176,7 +230,7 @@ export default class Main extends React.Component {
                 <div className="navbar">
                   <MyNavbar isFBLogin={this.state.FBLoggedIn} fblogout={this.handleFBLogout} fblogin={this.handleFBLogin} addSubmit={this.handleAddRestaurant}/>
                 </div>
-                {/* 新map */}
+
                 <div className="main-map-or-search">
                   <Route exact path="/" render={() => (
                     <div className='container d-flex flex-column justify-content-between align-items:center '>
@@ -195,7 +249,9 @@ export default class Main extends React.Component {
                         <div className='container searchIcon'>
                           <i className="fa fa-search" aria-hidden="true"></i>
                         </div>
-                        <SearchBar onSearch={this.handleSearch}/> {/* 新map案件 */}
+
+                        <SearchBar onSearch={this.handleSearch}/>
+
                         <div className="the-fucking-button">
                           <Link to={`/map`}>
                             <RaisedButton labelColor="#FFF" label="食起來" labelPosition="before" backgroundColor="#a4c639" icon={< MapsPlace color = {
@@ -203,11 +259,11 @@ export default class Main extends React.Component {
                             } />}/>
                           </Link>
                         </div>
-                        {/* 新map案件 */}
+
                       </div>
                     </div>
                   )}/>
-                  {/* 新map */}
+
                   <Route path="/map" render={() => (
                     <div>
                       <FoodMap/>
@@ -220,14 +276,14 @@ export default class Main extends React.Component {
                   )
                   }/>
 
-                </div>
+                  </div>
 
               </Container>
             </div>
             <div className='contents'>
-              <Route exact path="/" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/list" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/shop" render={() => (<Shops rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
+              <Route exact path="/" render={() => (<SearchList hasMore={this.state.hasMore} moreRests={this.handleMoreRests} ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/list" render={() => (<SearchList hasMore={this.state.hasMore} moreRests={this.handleMoreRests} ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/shop" render={() => (<Shops  FBinfo={this.state.FBLoginin}  rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>
               FOODY | BY TEAM SIX

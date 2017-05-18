@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import canUseDOM from "can-use-dom";
 
 import raf from "raf";
-import {withGoogleMap, GoogleMap, Circle, InfoWindow} from "react-google-maps";
+
+import {withGoogleMap, GoogleMap, Circle, InfoWindow,Marker} from "react-google-maps";
+import {searchFoodyFromApi} from 'api/posts.js'
+
 import './FoodMap.css'
 
 const geolocation = (canUseDOM && navigator.geolocation
@@ -15,7 +18,9 @@ const geolocation = (canUseDOM && navigator.geolocation
   }));
 
 const GeolocationExampleGoogleMap = withGoogleMap(props => (
-  <GoogleMap defaultZoom={15} center={props.center}>
+
+  <GoogleMap defaultZoom={14} center={props.center}>
+
     {props.center && (
       <InfoWindow position={props.center}>
         <div>{props.content}</div>
@@ -28,6 +33,14 @@ const GeolocationExampleGoogleMap = withGoogleMap(props => (
       strokeOpacity: 1,
       strokeWeight: 1
     }}/>)}
+
+    {props.markers.map(marker => (
+      <Marker
+        {...marker}
+        onRightClick={() => props.onMarkerRightClick(marker)}
+      />
+    ))}
+
   </GoogleMap>
 ));
 
@@ -38,12 +51,21 @@ export default class FoodMap extends React.Component {
     this.state = {
       center: null,
       content: null,
-      radius: 500
+
+      radius: 500,
+      rests:[],
+      markers:[]
+
     };
 
     this.isUnmounted = false;
 
   }
+
+  handleMarkerRightClick(marker){
+    console.log(marker.key);
+  }
+
 
   componentDidMount() {
     const tick = () => {
@@ -70,7 +92,25 @@ export default class FoodMap extends React.Component {
         content: `你在這兒.`
       },()=>{
         console.log("lat",this.state.center.lat,"lng",this.state.center.lng);
-        // Call API HERE!
+
+        searchFoodyFromApi(this.state.center.lat,this.state.center.lng).then(n => {
+          console.log("ajax call", n);
+          let marker=[];
+          for(var el of n)
+          {
+            let m={
+              position:{lat:el.lat,lng:el.lng},
+              defaultAnimation: 2,
+              key: el.name
+            }
+            marker.push(m);
+          }
+          this.setState({markers:marker,rests:n});
+        }).catch(err => {
+          console.error('Error foody map', err);
+          this.setState({center:null});
+        });
+
       });
 
       raf(tick);
@@ -106,6 +146,10 @@ export default class FoodMap extends React.Component {
           center={this.state.center}
           content={this.state.content}
           radius={this.state.radius}
+
+          markers={this.state.markers}
+          onMarkerRightClick={this.handleMarkerRightClick}
+
         />
       </div>
 

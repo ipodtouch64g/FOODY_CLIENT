@@ -49,14 +49,19 @@ export default class Shops extends React.Component {
   }
 
   handleSubmit(e) {
-    e.preventDefault();
 
-    this.inputEl.blur();
-    if (this.state.inputValue && this.state.inputValue.trim()) {
-      this.createPosts(this.state.inputValue, this.props.rests[this.props.shopIndex].id);
-      this.handleFormToggle();
-    } else {
-      this.state.inputEl = '';
+        e.preventDefault();
+        console.log (this.props.FBinfo);
+        this.inputEl.blur();
+        if (this.state.inputValue && this.state.inputValue.trim()) {
+            let tmp = this.props.FBinfo.picture?this.props.FBinfo.picture.data.url:'-1';
+            //console.log("FB??",tmp);
+            this.createPosts(this.state.inputValue,this.props.rests[this.props.shopIndex].id,this.props.FBinfo.name,tmp);
+            this.handleFormToggle();
+        } else {
+            this.state.inputEl = '';
+        }
+
     }
   }
 
@@ -73,15 +78,18 @@ export default class Shops extends React.Component {
     });
   }
 
-  createPosts(text, r_id) {
-    createPostFromApi(text, r_id).then(posts => {
-      this.listPost(r_id);
-      console.log("ajax call", this.state.posts);
-    }).catch(err => {
-      console.error('Error listing posts', err);
-      this.setState({posts: []});
-    });
-  }
+
+    createPosts(text,r_id,u_id,img) {
+      //console.log("CREATE?",u_id,img);
+        createPostFromApi(text,r_id,u_id,img).then(posts => {
+            this.listPost(r_id);
+            console.log("ajax call", this.state.posts);
+        }).catch(err => {
+          console.error('Error listing posts', err);
+          this.setState({posts: []});
+        });
+    }
+
 
   componentWillMount() {
     this.listPost(this.props.rests[this.props.shopIndex].id);
@@ -114,6 +122,16 @@ export default class Shops extends React.Component {
                     <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
                   </Row>
                 </div>
+
+
+              </Col>
+            </Row>
+
+          </Container>
+        </div>
+
+        <Container>
+
 
               </Col>
             </Row>
@@ -154,12 +172,12 @@ export default class Shops extends React.Component {
                   <Card>
                     <CardTitle title="評論"/>
                     <PostList className="postList" posts={this.state.posts}/>
-                    <div className={`post-form`}>{this.state.formToggle
-                        ? <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
-                            <Input type='text' name='postText' getRef={el => {
-                              this.inputEl = el
-                            }} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
-                            <Button color="danger">發表</Button>
+
+                      <div className={`post-form`}>{this.state.formToggle ?
+                      <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
+                              <Input type='textarea' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
+                              <Button color="danger">發表</Button>
+
                           </Form>
                         : <Button className='btn-form' onClick={this.handleFormToggle}>
                           <i className='fa fa-commenting' aria-hidden="true"></i>&nbsp;&nbsp;給點建議&nbsp;&nbsp;</Button>

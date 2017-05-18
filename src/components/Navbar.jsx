@@ -105,10 +105,10 @@ export default class MyNavbar extends React.Component {
           <ToolbarGroup>
 
 
+
               <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={styles.mediumIcon} style={styles.medium} tooltip={this.props.isFBLogin?"登出":"登入"}>
                 <FacebookLogin   cssClass="fbicon" icon={<ActionPermIdentity color="white" style={styles.mediumIcon}/>} textButton="" appId="1674155752890129"  fields="name,email,picture" callback={this.props.isFBLogin?this.props.fblogout:this.props.fblogin}/>
               </IconButton>
-
 
 
 

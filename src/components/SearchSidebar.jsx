@@ -236,24 +236,24 @@ export default class SearchSidebar extends React.Component {
                   primaryText="中式料理"
                   disabled={true}
                   nestedItems={[
-                    <ListItem key={1} primaryText="海鮮餐廳"  />,
-                    <ListItem key={2} primaryText="山產野菜餐廳"  />,
-                    <ListItem key={3} primaryText="北京菜"  />,
-                    <ListItem key={4} primaryText="客家菜"  />,
-                    <ListItem key={5} primaryText="四川菜"  />,
-                    <ListItem key={6} primaryText="湘菜(湖南菜)"  />,
-                    <ListItem key={7} primaryText="台菜餐廳"  />,
-                    <ListItem key={8} primaryText="上海菜(江浙菜)"  />,
-                    <ListItem key={9} primaryText="粵菜"  />,
-                    <ListItem key={10} primaryText="港式飲茶"  />,
-                    <ListItem key={11} primaryText="麵食點心"  />,
-                    <ListItem key={12} primaryText="其它中式料理"  />,
-                    <ListItem key={13} primaryText="熱炒、快炒"  />,
-                    <ListItem key={14} primaryText="台灣原住民料理"  />,
-                    <ListItem key={15} primaryText="新疆菜"  />,
-                    <ListItem key={16} primaryText="西藏菜"  />,
-                    <ListItem key={17} primaryText="雲南菜"  />,
-                    <ListItem key={18} primaryText="眷村菜"  />
+                    <ListItem key={1} primaryText="海鮮餐廳" onClick={()=>this.handlecategoryclick("海鮮餐廳")} />,
+                      <ListItem key={2} primaryText="山產野菜餐廳" onClick={()=>this.handlecategoryclick("山產野菜餐廳")} />,
+                      <ListItem key={3} primaryText="北京菜" onClick={()=>this.handlecategoryclick("北京菜")} />,
+                      <ListItem key={4} primaryText="客家菜" onClick={()=>this.handlecategoryclick("客家菜")} />,
+                      <ListItem key={5} primaryText="四川菜" onClick={()=>this.handlecategoryclick("四川菜")} />,
+                      <ListItem key={6} primaryText="湘菜(湖南菜)" onClick={()=>this.handlecategoryclick("湘菜(湖南菜)")} />,
+                      <ListItem key={7} primaryText="台菜餐廳" onClick={()=>this.handlecategoryclick("台菜餐廳")} />,
+                      <ListItem key={8} primaryText="上海菜(江浙菜)" onClick={()=>this.handlecategoryclick("上海菜(江浙菜)")} />,
+                      <ListItem key={9} primaryText="粵菜" onClick={()=>this.handlecategoryclick("粵菜")} />,
+                      <ListItem key={10} primaryText="港式飲茶" onClick={()=>this.handlecategoryclick("港式飲茶")} />,
+                      <ListItem key={11} primaryText="麵食點心" onClick={()=>this.handlecategoryclick("麵食點心")} />,
+                      <ListItem key={12} primaryText="其它中式料理" onClick={()=>this.handlecategoryclick("其它中式料理")} />,
+                      <ListItem key={13} primaryText="熱炒、快炒" onClick={()=>this.handlecategoryclick("熱炒、快炒")} />,
+                      <ListItem key={14} primaryText="台灣原住民料理" onClick={()=>this.handlecategoryclick("台灣原住民料理")} />,
+                      <ListItem key={15} primaryText="新疆菜" onClick={()=>this.handlecategoryclick("新疆菜")} />,
+                      <ListItem key={16} primaryText="西藏菜" onClick={()=>this.handlecategoryclick("西藏菜")} />,
+                      <ListItem key={17} primaryText="雲南菜" onClick={()=>this.handlecategoryclick("雲南菜")} />,
+                      <ListItem key={18} primaryText="眷村菜" onClick={()=>this.handlecategoryclick("眷村菜")} />
                   ]}
                 />,
                 <ListItem
