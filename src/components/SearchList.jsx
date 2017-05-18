@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {Container, Row, Col, ListGroup, ListGroupItem} from 'reactstrap';
 import SearchItem from 'components/SearchItem.jsx';
 import SearchSort from 'components/SearchSort.jsx';
+import InfiniteScroll from 'react-infinite-scroller';
 import './SearchList.css';
+
 import SearchSidebar from 'components/SearchSidebar.jsx';
 export default class SearchList extends React.Component {
 
@@ -40,7 +42,7 @@ export default class SearchList extends React.Component {
                 <h4>{this.props.searchText?this.props.searchText:""}</h4>
               </Col>
               <Col>
-                <div className="search-sort">{this.props.searchText?<SearchSort reSort={this.props.reSort}/>:"FOODY |"}</div>
+                <div className="search-sort"><SearchSort reSort={this.props.reSort}/></div>
               </Col>
             </Row>
           </Container>
@@ -54,7 +56,11 @@ export default class SearchList extends React.Component {
                 <div className="advance-search-bar"><SearchSidebar onSearch={this.props.ADVsearch}/></div>
               </Col>
               <Col sm="8">
-                <div className="wrapper-cards">{children}</div>
+                <div className="wrapper-cards">
+                  <InfiniteScroll initialLoad={false} loadMore={this.props.moreRests} hasMore={this.props.hasMore}> 
+                    {children}
+                  </InfiniteScroll>
+                </div>
               </Col>
 
             </Row>

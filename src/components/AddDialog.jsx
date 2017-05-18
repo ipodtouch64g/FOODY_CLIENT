@@ -15,8 +15,8 @@ export default class AddDialog extends React.Component {
     super(props);
 
     this.state = {
-      valueName: 'Restaurant Name',
-      valueCategory: 'Restaurant Category',
+      valueName: '',
+      valueCategory: '',
       valueAddress: 'Restaurant address',
       valueAverage: 100,
       valueTelephone: 'Restaurant Telephone'

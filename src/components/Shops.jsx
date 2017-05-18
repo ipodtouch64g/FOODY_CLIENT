@@ -7,7 +7,15 @@ import {
   CardTitle,
   CardText
 } from 'material-ui/Card';
-import {Container,ButtonDropdown ,Form,Input , Button, Row, Col} from 'reactstrap';
+import {
+  Container,
+  ButtonDropdown,
+  Form,
+  Input,
+  Button,
+  Row,
+  Col
+} from 'reactstrap';
 import FlatButton from 'material-ui/FlatButton';
 import './Shops.css';
 import { listPostFromApi,createPostFromApi} from 'api/posts.js';
@@ -41,10 +49,12 @@ export default class Shops extends React.Component {
 
   handleSubmit(e) {
         e.preventDefault();
-
+        console.log (this.props.FBinfo);
         this.inputEl.blur();
         if (this.state.inputValue && this.state.inputValue.trim()) {
-            this.createPosts(this.state.inputValue,this.props.rests[this.props.shopIndex].id);
+            let tmp = this.props.FBinfo.picture?this.props.FBinfo.picture.data.url:'-1';
+            //console.log("FB??",tmp);
+            this.createPosts(this.state.inputValue,this.props.rests[this.props.shopIndex].id,this.props.FBinfo.name,tmp);
             this.handleFormToggle();
         } else {
             this.state.inputEl = '';
@@ -64,8 +74,9 @@ export default class Shops extends React.Component {
         });
     }
 
-    createPosts(text,r_id) {
-        createPostFromApi(text,r_id).then(posts => {
+    createPosts(text,r_id,u_id,img) {
+      //console.log("CREATE?",u_id,img);
+        createPostFromApi(text,r_id,u_id,img).then(posts => {
             this.listPost(r_id);
             console.log("ajax call", this.state.posts);
         }).catch(err => {
@@ -83,31 +94,34 @@ export default class Shops extends React.Component {
 
       <div className='wrapper'>
 
-          <div className="wrapper-title">
-            <Container fluid>
-              <Row>
-                <div className="map">
-                  <Map lat={this.props.rests[this.props.shopIndex].lat} lng={this.props.rests[this.props.shopIndex].lng}/>
+        <div className="wrapper-title">
+          <Container fluid>
+            <Row>
+              <div className="map">
+                <Map lat={this.props.rests[this.props.shopIndex].lat} lng={this.props.rests[this.props.shopIndex].lng}/>
+              </div>
+              <Col sm="auto">
+                <a href={"https://www.google.com.tw/maps/search/" + this.props.rests[this.props.shopIndex].name}>
+                  <img src={this.props.rests[this.props.shopIndex].image === '-1'
+                    ? '../images/default.png'
+                    : this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 " alt=""/>
+                </a>
+              </Col>
+              <Col sm="8">
+                <div className="text">
+                  <Row>
+                    <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
+                  </Row>
+                  <Row>
+                    <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
+                  </Row>
                 </div>
-                <Col sm="auto">
 
-                  <img src={this.props.rests[this.props.shopIndex].image==='-1'?'../images/default.png':this.props.rests[this.props.shopIndex].image} className="title-image" height="200" width="200 "alt=""/>
-                </Col>
-                <Col sm="8">
-                  <div className="text">
-                    <Row>
-                      <div className="store-name">{this.props.rests[this.props.shopIndex].name}</div>
-                    </Row>
-                    <Row>
-                      <div className="store-attributes">{`${this.props.rests[this.props.shopIndex].address}`}</div>
-                    </Row>
-                  </div>
+              </Col>
+            </Row>
 
-                </Col>
-              </Row>
-
-            </Container>
-          </div>
+          </Container>
+        </div>
 
         <Container>
 
@@ -147,7 +161,7 @@ export default class Shops extends React.Component {
                     <PostList className="postList" posts={this.state.posts}/>
                       <div className={`post-form`}>{this.state.formToggle ?
                       <Form className='form-inline justify-content-center' onSubmit={this.handleSubmit}>
-                              <Input type='text' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
+                              <Input type='textarea' name='postText' getRef={el => {this.inputEl = el}} value={this.state.inputValue} onChange={this.handleInputChange}></Input>&nbsp;
                               <Button color="danger">發表</Button>
                           </Form>
                           :<Button className='btn-form'  onClick={this.handleFormToggle}><i className='fa fa-commenting' aria-hidden="true"></i>&nbsp;&nbsp;給點建議&nbsp;&nbsp;</Button>

@@ -19,12 +19,22 @@ import {Container, Collapse, Input, Button} from 'reactstrap';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SearchBar from './SearchBar.jsx'
 import SearchList from './SearchList.jsx'
-import {searchListFromApi, sortListFromApi, createRest} from 'api/posts.js'
+import {searchListFromApi , createRest} from 'api/posts.js'
 import Shops from './Shops.jsx'
 import Recommend from './Recommend.jsx'
 import './Main.css';
 import MyNavbar from './Navbar.jsx'
 import SignUpPage from './SignUpPage.jsx'
+import MapsPlace from 'material-ui/svg-icons/maps/place';
+import SvgIcon from 'material-ui/SvgIcon';
+import ActionHighlightOff from 'material-ui/svg-icons/action/highlight-off';
+import RaisedButton from 'material-ui/RaisedButton';
+import FontIcon from 'material-ui/FontIcon';
+import {fullWhite} from 'material-ui/styles/colors';
+import FoodMap from './FoodMap.jsx'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+
+
 export default class Main extends React.Component {
 
   constructor(props) {
@@ -37,6 +47,11 @@ export default class Main extends React.Component {
       openShop: false,
       indexOfList: 0,
       Loading: false,
+      ascending: 'no',
+      city: '',
+      category: '',
+      price: 0,
+      hasMore: true,
       posts: []
     };
     this.handleResort = this.handleResort.bind(this);
@@ -61,6 +76,8 @@ export default class Main extends React.Component {
 
   handleFBLogin = (response) => {
     console.log(response);
+    if(response.status==='unknown')
+      return;
     this.setState({
       FBLoginin: response,
       FBLoggedIn: true
@@ -70,25 +87,26 @@ export default class Main extends React.Component {
   }
   handleFBLogout = () => {
     this.setState({
-      FBLoginin: [],
+      FBLoginin: {},
       FBLoggedIn: false
     }, () => {
       console.log(this.state)
     });
   }
 
-  handleResort(asc) {
+  handleResort(asc){
     this.setState({
-      Loading: true
+      Loading: true,
+      ascending: asc?'ture':'false'
     }, () => {
-      sortListFromApi(this.state.searchText, asc).then(posts => {
+      searchListFromApi(this.state.searchText,this.state.city,this.state.category,this.state.price,this.state.ascending).then(posts => {
         this.setState({
           posts,
           Loading: false
         }, () => {
           console.log("ajax call", this.state.posts);
-          let a = "/list/" + this.state.searchText;
-          history.push(a);
+          let a = "/list/"+this.state.searchText;
+          history.push(a) ;
         });
       }).catch(err => {
         console.error('Error listing posts', err);
@@ -112,12 +130,17 @@ export default class Main extends React.Component {
 
   listPosts(searchText) {
     this.setState({
-      Loading: true
+      Loading: true,
+      city: '',
+      category:'',
+      price:'',
+      ascending: 'no'
     }, () => {
-      searchListFromApi(searchText).then(posts => {
+      searchListFromApi(searchText,this.state.city,this.state.category,this.state.price,this.state.ascending).then(posts => {
         this.setState({
           posts,
-          Loading: false
+          Loading: false,
+          hasMore: true
         }, () => {
           console.log("ajax call", this.state.posts);
           let a = "/list/" + searchText;
@@ -129,11 +152,54 @@ export default class Main extends React.Component {
       });
     });
   }
-  handleADVsearch(place, catagory, price) {
+  handleMoreRests =() =>{
+    if(this.state.posts.length!==0){
+      const start={
+        id:this.state.posts[this.state.posts.length-1].id,
+        average:this.state.posts[this.state.posts.length-1].average
+      };
+      this.setState({
+        Loading: true,
+        hasMore: false
+      }, () => {
+        searchListFromApi(this.state.searchText,this.state.city,this.state.category,this.state.price,this.state.ascending,start).then(newPosts => {
+          if(newPosts.length===0){
+            this.setState({
+              posts:[...this.state.posts,...newPosts],
+              Loading: false,
+              hasMore: false
+            }, () => {
+              console.log("ajax call", this.state.posts);
+              let a = "/list/" + this.state.searchText;
+              history.push(a);
+            });
+          }
+          else{
+            this.setState({
+              posts:[...this.state.posts,...newPosts],
+              Loading: false,
+              hasMore: true
+            }, () => {
+              console.log("ajax call", this.state.posts);
+              let a = "/list/" + this.state.searchText;
+              history.push(a);
+            });
+          }
+        }).catch(err => {
+          console.error('Error listing posts', err);
+          this.setState({posts: [], Loading: false});
+        });
+      });
+    }
+  }
+  handleADVsearch(place, category, price) {
     this.setState({
-      Loading: true
+      Loading: true,
+      city: place,
+      category: category,
+      price: price
     }, () => {
-      searchListFromApi(this.state.searchText, place, catagory, price).then(posts => {
+      searchListFromApi(this.state.searchText,place,category,price,this.state.ascending).then(posts => {
         this.setState({
           posts,
           Loading: false
@@ -158,31 +224,53 @@ export default class Main extends React.Component {
                 <div className="navbar">
                   <MyNavbar isFBLogin={this.state.FBLoggedIn} fblogout={this.handleFBLogout} fblogin={this.handleFBLogin} addSubmit={this.handleAddRestaurant}/>
                 </div>
-                <div className='container d-flex flex-column  justify-content-between align-items:center '>
-                  &nbsp;
-                  <div></div>
-                  <div className="mx-auto wow fadeInDown main-title">
+                <div className="main-map-or-search">
+                  <Route exact path="/" render={() => (
+                    <div className='container d-flex flex-column justify-content-between align-items:center '>
+                      &nbsp;
+                      <div></div>
+                      <div className="mx-auto wow fadeInDown main-title">
+                        <div>
+                          <h1>FOODY |</h1>
+                        </div>
+                        <div>
+                          <h3>your choice for food</h3>
+                        </div>
+                      </div>
+                      &nbsp; &nbsp; &nbsp;
+                      <div className='container align-items:center searchBar'>
+                        <div className='container searchIcon'>
+                          <i className="fa fa-search" aria-hidden="true"></i>
+                        </div>
+                        <SearchBar onSearch={this.handleSearch}/>
+                        <div className="the-fucking-button">
+                          <Link to={`/map`}>
+                            <RaisedButton labelColor="#FFF" label="食起來" labelPosition="before" backgroundColor="#a4c639" icon={< MapsPlace color = {
+                              fullWhite
+                            } />}/>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}/>
+                  <Route path="/map" render={() => (
                     <div>
-                      <h1>FOODY |</h1>
+                      <FoodMap/>
+                      <Link to={'/'}>
+                        < FloatingActionButton secondary={true} style={{float:"right"}}>
+                          <ActionHighlightOff/>
+                        < /FloatingActionButton>
+                      </Link>
                     </div>
-                    <div>
-                      <h3>your choice for food</h3>
-                    </div>
+                  )
+                  }/>
                   </div>
-                  &nbsp; &nbsp; &nbsp;
-                  <div className='container align-items:center searchBar'>
-                    <div className='container searchIcon'>
-                      <i className="fa fa-search" aria-hidden="true"></i>
-                    </div>
-                    <SearchBar onSearch={this.handleSearch}/>
-                  </div>
-                </div>
               </Container>
             </div>
             <div className='contents'>
-              <Route exact path="/" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/list" render={() => (<SearchList ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
-              <Route path="/shop" render={() => (<Shops rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
+              <Route exact path="/" render={() => (<SearchList hasMore={this.state.hasMore} moreRests={this.handleMoreRests} ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/list" render={() => (<SearchList hasMore={this.state.hasMore} moreRests={this.handleMoreRests} ADVsearch={this.handleADVsearch} reSort={this.handleResort} posts={this.state.posts} searchText={this.state.searchText} handleSearchItemClick={this.handleSearchItemClick}/>)}/>
+              <Route path="/shop" render={() => (<Shops  FBinfo={this.state.FBLoginin}  rests={this.state.posts} shopIndex={this.state.indexOfList}/>)}/>
             </div>
             <div className='footer'>
               FOODY | BY TEAM SIX

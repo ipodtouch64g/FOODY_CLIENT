@@ -104,19 +104,9 @@ export default class MyNavbar extends React.Component {
 
           <ToolbarGroup>
 
-
-              <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={this.props.isFBLogin?styles.no:styles.mediumIcon} style={this.props.isFBLogin?styles.no:styles.medium} tooltip="登入">
-                <FacebookLogin  cssClass="fbicon" icon={<ActionPermIdentity color="white" style={styles.mediumIcon}/>} textButton="" appId="1674155752890129" autoLoad={true} fields="name,email,picture" callback={this.props.fblogin}/>
-              </IconButton>
-
-                <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={this.props.isFBLogin?styles.mediumIcon:styles.no} style={this.props.isFBLogin?styles.medium:styles.no} tooltip="登出">
-                  <FacebookLogin  cssClass="fbicon" icon={<ActionPermIdentity color="darkorange" style={styles.mediumIcon}/>} textButton="" appId="1674155752890129" autoLoad={true} fields="name,email,picture" callback={this.props.fblogout}/>
-                </IconButton>
-
-
-
-
-
+            <IconButton className="icb" hoveredStyle={styles.h}  iconStyle={styles.mediumIcon} style={styles.medium} tooltip={this.props.isFBLogin?"登出":"登入"}>
+              <FacebookLogin   cssClass="fbicon" icon={<ActionPermIdentity color="white" style={styles.mediumIcon}/>} textButton="" appId="118647188708725"  fields="name,email,picture" callback={this.props.isFBLogin?this.props.fblogout:this.props.fblogin}/>
+            </IconButton>
 
             <ToolbarSeparator/>
             <IconButton className="icb" hoveredStyle={styles.h} onTouchTap={this.handleOpenA} iconStyle={styles.mediumIcon} style={styles.medium} tooltip="新增餐廳">
